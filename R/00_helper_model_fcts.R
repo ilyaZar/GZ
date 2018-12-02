@@ -6,11 +6,11 @@
 #
 #
 #
-f <- function(xtt, z, t, phi_x, bet_x) {
+f <- function(xa_tt, za, phi_xa, bet_xa) {
   # xt <- phi_x*xtt
-  xt <- phi_x*xtt + z %*% bet_x
+  xt <- phi_xa*xa_tt + za %*% bet_xa
   # xt <- phi_x*xtt + 8*cos(1.2*t)
-  # xt <- phi_x*xtt + 25*xtt/(1 + xtt^2) 
+  # xt <- phi_x*xtt + 25*xtt/(1 + xtt^2)
   # xt <- phi_x*xtt + 25*xtt/(1 + xtt^2) + 8*cos(1.2*t)
   return(xt)
 }

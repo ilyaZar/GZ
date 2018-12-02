@@ -11,7 +11,7 @@ if (testrun) {
   true_phi_x   <- 0.5  # True autoregressive/correlation parameter for states
   true_bet_x   <- 0    # True constant/random effect parameter for states
   # Initialization for the parameters
-  init_bet_sq_y <- true_betSQ_y   
+  init_bet_sq_y <- true_betSQ_y
   init_sig_sq_x <- true_sigSQ_x
   init_phi_x    <- true_phi_x
   init_bet_x    <- true_bet_x
@@ -35,8 +35,8 @@ if (testrun) {
   init_phi_x    <- -0.9
   init_bet_x    <- -sign(true_bet_x)*10
 }
-dataSim <- generate_data(sig_sq_x = true_sigSQ_x, bet_sq_y = true_betSQ_y,
-                         phi_x = true_phi_x, bet_x = true_bet_x, T = TT)
+dataSim <- generate_data(sig_sq_xa = true_sigSQ_x, phi_xa = true_phi_x,
+                         bet_xa = true_bet_x, T = TT)
 xt <- dataSim[[1]]
 yt <- dataSim[[2]]
 zt <- dataSim[[3]]

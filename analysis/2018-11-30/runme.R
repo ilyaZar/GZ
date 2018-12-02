@@ -9,15 +9,15 @@
 rm(list = ls())
 testrun <- F
 
-source("../../R/00_lib_load.R")
-source("../../R/00_helper_general.R")
-source("../../R/00_helper_model_fcts.R")
-source("../../R/00_helper_simulation_data.R")
+source("./R/00_lib_load.R")
+source("./R/00_helper_general.R")
+source("./R/00_helper_model_fcts.R")
+source("./R/00_helper_simulation_data.R")
 
-source("../../R/00_settings_simulation.R")
+source("./R/00_settings_simulation.R")
 
-source("../../R/01_cBPF_as.R")
-source("../../R/02_pgas.R")
+source("./R/01_cBPF_as.R")
+source("./R/02_pgas.R")
 
 if (testrun) {
   set.seed(123)
