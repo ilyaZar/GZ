@@ -42,16 +42,16 @@ dataSim <- generate_data(sig_sq_xa = true_sigSQ_x,
                          K = KK,
                          num_incs = num_obs,
                          par_levels = log(pars))
-xt   <- dataSim[[1]]
-yraw <- dataSim[[2]]
-yz   <- dataSim[[3]]
-yt <- matrix(0, nrow = TT, ncol = KK)
+x_t   <- dataSim[[1]]
+y_raw <- dataSim[[2]]
+yz_t  <- dataSim[[3]]
+y_t   <- matrix(0, nrow = TT, ncol = KK)
 for (t in 1:TT) {
-  ncut <- cut(yraw[t, ], breaks = yz[t, ])
-  yt[t, ] <- as.vector(table(ncut))
+  ncut <- cut(y_raw[t, ], breaks = yz_t[t, ])
+  y_t[t, ] <- as.vector(table(ncut))
   # print(t)
 }
-zt <- dataSim[[4]]
+z_t <- dataSim[[4]]
 # Hyperparameters for the inverse gamma priors (uninformative)
 prior_a <- 0.01
 prior_b <- 0.01
