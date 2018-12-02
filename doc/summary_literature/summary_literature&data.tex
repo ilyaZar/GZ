@@ -1,0 +1,336 @@
+\documentclass[a4paper,12pt]{scrartcl} % the percent sign is used for comments.
+\usepackage[margin=3cm]{geometry} % sets the borders to 3cm each
+\usepackage[english]{babel}     %defines language for spacing
+\usepackage[utf8]{inputenc}   % allows entering special characters
+\usepackage[T1]{fontenc}        % sets font to T1 and allows umlaute
+\usepackage{lmodern}            % improves font display in PDFs
+\usepackage{microtype}          % improves spacing when using lmodern
+\usepackage{amsmath,amsfonts,amssymb}   % allows particular math environments
+\usepackage{graphicx}           % allows using graphics
+\usepackage{booktabs}           %allows creating professional tables with commands like \toprule
+\usepackage{csquotes}           % better use of quotation marks, makes them context-sensitive
+%\usepackage{longtable}          % allows for Table over more than one page
+%\usepackage{sidewaystable}          % allows creating landscape tables
+\usepackage[labelfont=bf,format=hang]{caption} % more powerful caption of figures and tables; The language for the caption label like Figure is boldface (bf). The language is taken from the babel package, i.e. Abbildung if german instead of english.
+
+\usepackage{setspace}           % allows for \onehalfspacing and \doublespacing to set linespacing
+\usepackage{epstopdf}           % allows using eps-file with pdflatex
+\usepackage{textcomp}           % adds more symbols
+%\usepackage{indentfirst}       % use if you want to indent first row
+\usepackage[hyphens]{url}       % breaks overlong URLs (needs to be before biblatex)
+
+%%%% define the usage of BibLaTeX for citations and bibliographies
+\usepackage[%
+citestyle=authoryear-comp,%use compressed author-year citation
+bibstyle=JME,% use JME-style; change to JME_sentencecase to have all titles converted to lowercase letters
+maxbibnames=5,% %maximum number of names printed in bibliography before truncation with ``et al.'' is used
+minbibnames=1, % number of authors displayed if truncation happens
+maxnames=4,% maximum number of names printed in citation before et al. is used
+minnames=1,% number of authors displayed if truncation happens
+datezeros=false,% no leading 0 if dates are printed
+date=long,%
+isbn=false,% show no ISBNs in bibliography (applies only if not a mandatory field)
+url=false,% show no urls in bibliography (applies only if not a mandatory field)
+doi=false, % show no dois in bibliography (applies only if not a mandatory field)
+eprint=false, %show no eprint-field in bibliography (applies only if not a mandatory field)
+backend=biber %use biber as the backend; backend=bibtex is less powerful, but easier to install
+]{biblatex}
+
+\addbibresource{../mybibfile.bib} % defines the name of the .bib-file	
+
+
+
+\usepackage[pdfpagelabels=true,plainpages=false,pdftex,bookmarksnumbered=false,bookmarksopen=true]{hyperref}%plainpage and pdfpagelabels allows for correct figure links when using different page numberings
+% bookmarksnumbered=false shuts off TOC numbers in TOC of PDF
+% bookmarksopen=true opens TOC in Abobe Reader on the left
+
+
+\hypersetup{
+pdfproducer = {LaTeX},
+colorlinks,
+linkcolor=black,
+filecolor=yellow,
+urlcolor=blue,
+citecolor=black,
+pdftitle ={Title of the thesis},
+pdfsubject ={Thesis},
+pdfauthor = {Your Name },
+pdfkeywords = {Some keywords}
+pdfcreator={pdfLaTex}}
+
+
+
+\usepackage[%
+nonumberlist, %switch of displaying page numbers
+acronym,      %creates List of Abbreviations
+%toc,          %triggers entry into table of content
+%section      %defines the level where the TOC entry appears
+]{glossaries} % used to create list of symbols and abbreviations; one of the few packages to be defined after hyperref
+
+\newglossary[slg]{symbolslist}{syi}{syg}{List of Symbols} %defines a new list called symbolslist for the List of symbols
+
+\makeglossaries %need for sorting of entries to list of symbols and abbreviations; must be defined after all \newglossary commands
+
+%% define terms for List of Symbols; entries only appear if they have been referenced in the main document  using either \gls{} or \glsadd{}
+
+\newglossaryentry{symb:pi}{%
+    name={\ensuremath{\pi}}, %define symbol; the \ensuremath ensures the symbol can be used inside and outside math environments
+    description={ratio of circumference of circle to its diameter}, % the description that appears in the list of symbols
+    sort=symbolpi, % key for sorting the symbols
+    type=symbolslist % specifies that the entry belongs to the symbolslist-list and not the default (acronym) list
+    }
+
+\newglossaryentry{symb:i}{name={\ensuremath{i}},description={square root of $-1$},sort=symboli,type=symbolslist}
+\newglossaryentry{symb:e}{name={\ensuremath{e}},description={Euler number},sort=symbole,type=symbolslist}
+
+\newacronym{acro:OLS}{OLS}{Ordinary Least Squares}%defines the acronym OLS
+\glsadd{acro:OLS} % add the acronym to the list of abbreviations, regardless of whether it has been used in the document
+
+\onehalfspacing
+
+% ________________ Set up the document ______________________%
+
+\pagestyle{plain}          % empty header, page number in the middle of the footer
+\newcommand{\bs}{\boldsymbol}  % shortcut to generate bold symbols in math environments
+\setcounter{tocdepth}{3}   % The Table of contents is three levels deep, i.e. down to subsubsections.
+
+% ________________ Defines command \ScaleIfNeeded that scales Figures to width of the page if they are larger ______________________%
+
+\makeatletter
+\def\ScaleIfNeeded{%
+\ifdim\Gin@nat@width>\linewidth
+\linewidth
+\else
+\Gin@nat@width
+\fi
+}
+\makeatother
+
+
+\begin{document}
+
+% ________________ Title Page ______________________%
+
+
+
+\pagenumbering{roman}   % Roman numbering
+
+\begin{titlepage}
+
+\thispagestyle{empty}   % no number on titlepage
+%%%% to be deleted, only for information purposes
+%\begin{center}
+%\textbf{
+%This template is provided by Prof. Dr. Johannes Pfeifer, University of Mannheim\\
+%Please send comments and suggestions to \href{mailto:pfeifer@uni-mannheim.de}{pfeifer@uni-mannheim.de}\\
+%First Version: August 31, 2012\\
+%This Version: October 7, 2016\\
+%(Please remove this part in your thesis!)
+%}
+%\end{center}
+%%%%%
+
+
+\begin{center}
+\vspace*{2.cm}
+{\textbf  \Large Literature \& Data Summary for GZ project} \\
+\vspace*{2cm}
+\vspace{0.5cm}
+Institute of Econometrics and Statistics\\
+University of Cologne\\
+\vspace*{0.5cm}
+by:\\
+Bastian Gribisch and Ilya Zarubin\\
+\vspace*{0.5cm}
+
+\end{center}
+
+
+\vfill
+\begin{flushright}
+   \emph{submitted by:} \\
+   \emph{Your name} \\
+   \emph{Student ID: ????}\\
+    \emph{Degree Program: Bachelor of Science in Economics}\\
+   \vspace*{0.5cm}
+    \emph{Street name and number}\\
+    \emph{Postcode and place}\\
+   \emph{Phone Number}\\
+   \emph{Email address}\\
+\end{flushright}
+
+
+\end{titlepage}
+
+\clearpage                % forces a new page and setting of current float objects stored by Latex
+
+
+
+% ________________ Table of Contents/Figures/Tables ______________________%
+
+\tableofcontents
+\clearpage
+\listoffigures
+\clearpage
+\listoftables
+\clearpage
+\printglossary[type=\acronymtype,style=long,title=List of Abbreviations]
+\clearpage
+\printglossary[type=symbolslist,style=long,title=List of Symbols]
+\clearpage
+
+% ________________ Main Matter ______________________%
+
+\pagenumbering{arabic}      % Arabic Numbering
+\setcounter{page}{1}        % Start Numbering at 1
+
+\section{Finance, inequality and the poor (T. Beck, A. D-Kunt, R. Levine - 2007}
+\subsection{Objective of the Study}
+\subsection{Method (Economic)}
+\subsection{Method (Econoemtric)}
+\subsection{Data}
+\subsection{Conclusion/Results/Main findings}
+\subsection{Remarks}
+%
+%
+%
+%
+%
+\clearpage
+\section{Rising Income Inequality:Technology, or Trade and Financial Globalization(F. Jaumotte, S. Lall, and C. Papageorgiou - 2013)}
+\subsection{Objective of the Study}
+The paper examines the relationship between the rapid pace of trade and financial globalization and the rise in income inequality observed in most countries over the past two decades. In particular, the effects of trade, financial globalization and technology on income inequality are studied.
+\begin{itemize}
+\item developed and devoloping countries as cross section (while existing papers mostly address within country experience for the specific country being studied)
+\item identify the separate effects of both key dimensions of globalization: greater trade openess and greater financial openess (while exisiting literature has mainly focused primarily on trade with limited attention to financial globalization)
+\item subcomponents of trade and financial globalization are analysed, see data section below $\Rightarrow$ it is expected that different subcomponents of globalization affect inequality in different ways
+\item assembling of new data set on income inequality (using World Bank Povcal and Luxemburg income study databases) that produces higher methodoligcal consistency in survey-based ineq. measures across countries over time
+\item interestingly, the effects on the bottom four quintiles are qualitatively similar and in the opposite direction from that on the richest quintile: export growth is associated with a rise in the income shares of the bottom four quintiles and a decrease
+in the share of the richest quintile and, in contrast, financial globalization and technological progress are shown to benefit mainly the richest 20 percentof the population
+\end{itemize}
+\subsection{Method (Economic)}
+There is no theoretical model but some economic intuition for the model structure can be provided:\\
+To gain further insight into the impact of globalization on inequality, we also estimated our model using the income shares of the five quintiles of the population as dependent variables. 
+\subsection{Method (Econoemtric)}
+\subsection{Data}
+Newly compiled panel of 51 countries over a 23-year period from 1981 to 2003:
+\begin{itemize}
+\item subcomponents of trade and financial globalization e.g. exports of manufacturing vs. agriculture, and portfolio debt and equity flows vs FDI
+\end{itemize}
+\subsection{Conclusion/Results/Main findings}
+The paper reports estimates that support a greater impact of technological progress than globalization on inequality. The limited overall impact of globalization reflects two offsetting tendencies: whereas trade globalization is associated with a reduction in inequality, financial globalization - and foreign direct investment in particular - is associated with an
+increase in inequality. More specifically:
+\begin{itemize}
+\item income inequality has risen in most countries and regions over past two decades
+\item at the same time avg. real income of the poorest segements of the population have increased across all regions and income groups $\Rightarrow$ suggests that inequality has increased in the upper parts of the distribution in most countries, a fact consistent with recent evidence in the United States and the United Kingdom
+\item trade liberalization and export growth are found to be associated with lower inequality
+\item increased financial openness is associated with higher inequality
+\item however, the combined contribution of trade and financial openness to rising inequality has been much lower than that of technological change, both at a global level and
+especially markedly in developing countries
+\item the spread of technology is, of course, itself related to increased globalization, but technological progress is nevertheless seen to have a separately identifiable effect on inequality
+\item The disequalizing impact of financial openness - mainly felt through FDI - and technological progress both appear to be working by increasing the premium on higher skills and possibly higher returns to capital, rather than limiting opportunities for economic advancement
+\item consistent with this, increased access to education is associated with more equal income distributions on average
+\end{itemize}
+\subsection{Remarks}
+Technological progress and globalization are widely regarded as the main drivers of recent economic growth.
+\begin{itemize}
+\item[$\hookrightarrow$] technological progress: development and spread of new ideas and methods that enhance productivity and efficiency
+\item[$\hookrightarrow$] globalization: catalyst of technology that facilitates the diffusion of ideas and methods
+\item[$\hookrightarrow$] increase in globalization e.g. seen via  openess to trade (dismantling of trade barriers) or easing restricitons on FDI helps technology diffusion (world bank report) even though technological innovations occur only in a handful of advanced economies
+\end{itemize}
+However, the distributional effect of growth of the world economy (largely induced by technolgy and globalization) is less clear and highly debated: the benefits of rising incomes and aggregate GDP growth rates associated with gloabalization have not been shared equally across all segements of the population. Indeed, income inequality has risen in most countries and regions over the past two decades, including in developed countries which were thought to have reached levels of prosperity where inequality would level off in line with the Kuznets hypothesis. Since this period has also been associated with unprecedented trade and more recently financial integration, much of the debate over rising inequality has focused on the role that globalization - especially of trade - has played in explaining inequality patterns.\\
+Understanding the causes of inequality is fundamental to devising policy measures that can allow the rising prosperity of recent decades to be shared more broadly than has been evident so far. Reducing inequaltiy helps to:
+\begin{itemize}
+\item[$\hookrightarrow$] achieve a more egalitarian distribution of income and addressing welfare and social concerns that widening disparities in income raise
+\item[$\hookrightarrow$] overcome the lack of economic opportunity that occurs when not all economic agents are able to fully exploit the new opportunities created by globalization $\rightarrow$ increasing inequality may limit the growth potential of the economy by not matching capital and labor as efficiently as possible
+\item[$\hookrightarrow$] make a greater proportion of the population less vulnerable to to poverty (when economic shocks of various kinds occur)
+\end{itemize}
+%
+%
+%
+%
+%
+\clearpage
+%_________________ End of Main Matter_________________%
+
+\clearpage
+
+%_________________ Reference Section _______________%
+
+\phantomsection                                   % allows for correct link to Table of Contents
+\addcontentsline{toc}{section}{References}        % Adds the line "References" to Table of contents
+\onehalfspacing
+
+
+\printbibliography % print the bibliography using BibLaTex
+
+
+%% alternative using BibTeX
+%\bibliographystyle{econometrica}                  % sets the style for the Bibliography
+%\bibliography{mybibfile}                         % Uses the Bibtex-file mybibfile.bib
+
+
+\clearpage
+%_________________ Space for Supplementary Material _______________%
+\appendix
+\numberwithin{equation}{section} %restarts equation numbering with 1 and adds the appendix in front
+\numberwithin{table}{section} %same for Tables
+\numberwithin{figure}{section} %and for Figures
+
+\section{Appendix 1}
+
+Some Information relegated to the appendix.
+\begin{equation}
+    MV=PQ
+\end{equation}
+
+\pagebreak
+
+\section{Supplementary Tables}
+
+
+
+
+\begin{table}[h!] % h! places the float at this place, use t for top or b for bottom
+\caption{Title of the table}
+\label{tab:SuppTable1}
+\centering
+ \begin{tabular}{lcr}
+   Another & small & table\\
+\toprule
+   left aligned & centered & right aligned \\
+   \multicolumn{2}{c}{Text over two columns} & third column \\
+\bottomrule
+\end{tabular}
+\caption*{\footnotesize{\emph{Notes:} Add the description here}}
+\end{table}
+
+\clearpage
+
+\section{Eidesstattliche Versicherung/Affidavit}
+
+Ich versichere, dass ich die vorliegende Arbeit ohne Hilfe Dritter und ohne Benutzung anderer
+als der angegebenen Quellen und Hilfsmittel angefertigt und die den benutzten Quellen
+wörtlich oder inhaltlich entnommenen Stellen als solche kenntlich gemacht habe. Diese Arbeit
+hat in gleicher oder ähnlicher Form noch keiner Prüfungsbehörde vorgelegen.\\
+Ich bin damit einverstanden, dass meine Arbeit zum Zwecke eines Plagiatsabgleichs in
+elektronischer Form anonymisiert versendet und gespeichert werden kann.\\
+
+\vspace{1cm}
+
+I affirm that this Bachelor thesis was written by myself without any unauthorised third-party
+support. All used references and resources are clearly indicated. All quotes and citations are
+properly referenced. This thesis was never presented in the past in the same or similar form to
+any examination board.\\
+I agree that my thesis may be subject to electronic plagiarism check. For this purpose an
+anonymous copy may be distributed and uploaded to servers within and outside the University
+of Mannheim.
+
+\vspace{3cm}
+\makebox[\textwidth]{\hrulefill \hspace{3cm} \hrulefill}
+
+Ort, Datum/Place, Date \hfill Unterschrift/Signature
+
+
+
+\end{document}

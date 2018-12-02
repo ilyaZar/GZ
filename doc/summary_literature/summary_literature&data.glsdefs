@@ -1,0 +1,30 @@
+\ifglsentryexists{acro:DSGE}{}%
+{%
+\gls@defglossaryentry{acro:DSGE}%
+{%
+name={DSGE},%
+sort={DSGE},%
+type={acronym},%
+first={Dynamic Stochastic General Equilibrium\glsspace (DSGE)},%
+firstplural={Dynamic Stochastic General Equilibriums\glsspace (DSGEs)},%
+text={DSGE},%
+plural={DSGEs},%
+description={Dynamic Stochastic General Equilibrium},%
+descriptionplural={Dynamic Stochastic General Equilibrium\acrpluralsuffix },%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Dynamic Stochastic General Equilibrium},%
+longplural={Dynamic Stochastic General Equilibriums},%
+short={DSGE},%
+shortplural={DSGEs},%
+counter={page},%
+parent={},%
+%
+}%
+}%
