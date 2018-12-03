@@ -19,21 +19,18 @@ if (testrun) {
   burnin   <- 1000     # Number of interations to burn
   # Generate data
   true_sigSQ_x <- 0.2  # True process noise variance
-  true_betSQ_y <- 1    # True measurement noise variance
   true_phi_x   <- 0.5  # True autoregressive/correlation parameter for states
-  true_bet_x   <- c(1,-2, 3, -4, 5) # True regressor coefficients for states
+  true_bet_x   <- c(1, -2, 3, -4, 5) # True regressor coefficients for states
   # Initialization for the parameters
-  init_bet_sq_y <- true_betSQ_y
   # init_sig_sq_x <- true_sigSQ_x
   # init_phi_x    <- true_phi_x
   # init_bet_x    <- true_bet_x
-
-  init_sig_sq_x <- 100
+  init_sig_sq_x <- 1
   init_phi_x    <- -0.9
-  init_bet_x    <- -sign(true_bet_x)*10
+  init_bet_x    <- -sign(true_bet_x)*0.6
 }
 KK       <- 10     # Number of income classes - 1
-num_obs  <- 10e3   # Number of total individual incomes
+num_obs  <- 10e4   # Number of total individual incomes
 pars     <- c(1.5, 150, 2.5, 3.5)
 dataSim <- generate_data(sig_sq_xa = true_sigSQ_x,
                          phi_xa = true_phi_x,
@@ -51,7 +48,8 @@ for (t in 1:TT) {
   y_t[t, ] <- as.vector(table(ncut))
   # print(t)
 }
-z_t <- dataSim[[4]]
+yz_t <- yz_t[, -(KK + 1)]
+z_t  <- dataSim[[4]]
 # Hyperparameters for the inverse gamma priors (uninformative)
 prior_a <- 0.01
 prior_b <- 0.01

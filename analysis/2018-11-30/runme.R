@@ -29,7 +29,7 @@ source("./R/02_pgas.R")
 #
 #
 # PGAS run ----------------------------------------------------------------
-res <- pgas(N = num_particles, M = num_mcmc, K = KK,
+res <- pgas(N = num_particles, M = num_mcmc, K = KK, TT = TT,
             y = y_t, yz = yz_t, Za = z_t,
             par_prior = c(prior_a, prior_b),
             par_inits = list(init_sig_sq_x,
@@ -41,4 +41,4 @@ res <- pgas(N = num_particles, M = num_mcmc, K = KK,
 #
 #
 #
-source("99_analyse_results.R")
+source("./R/99_analyse_results.R")

@@ -6,8 +6,8 @@ generate_data <- function(T, K, num_incs, sig_sq_xa,
   dim_reg <- length(bet_xa)
 
   za <- matrix(rnorm(T*length(bet_xa)), nrow = T, ncol = dim_reg)
-  za[, 1] <- 1
-  par_level_adjust <- za[, -dim_reg] %*% bet_xa[-dim_reg]
+  # za[, 1] <- 1
+  par_level_adjust <- za[, -dim_reg, drop = FALSE] %*% bet_xa[-dim_reg]
   par_level_adjust <- par_levels[1] * (1 - phi_xa) - par_level_adjust
   par_level_adjust <- par_level_adjust/bet_xa[dim_reg]
   za[, dim_reg]    <- par_level_adjust
@@ -22,19 +22,9 @@ generate_data <- function(T, K, num_incs, sig_sq_xa,
                      phi_xa = phi_xa, bet_xa = bet_xa)
       xa[t + 1] <- xa[t + 1] + sqrt(sig_sq_xa)*rnorm(n = 1)
     }
-    # yz[t, ] <- qgb2(prob = seq(from = 0, to = 1 - (1/K), length.out = K),
-    #                 shape1 = xa[t],
-    #                 scale = par_levels[2],
-    #                 shape2 = par_levels[3], shape3 = par_levels[4])
-    # yt[t, ] <- rgb2(n = num_incs, shape1 = xa[t],
-    #                 scale = par_levels[2],
-    #                 shape2 = par_levels[3],
-    #                 shape3 = par_levels[4])
-    # y[t] <- sqrt(bet_sq_y*exp(xa[t]))*rnorm(1)
-    # y[t] <- g(xa[t]) + sqrt(bet_sq_y)*rnorm(1)
-    # print(t)
   }
   xa <- exp(xa)
+  par_levels <- exp(par_levels)
   seq_prob <- rep(seq(from = 0, to = 1 - (1/K), length.out = K), each = T)
   yz <- matrix(qgb2(prob = seq_prob,
                     shape1 = xa,

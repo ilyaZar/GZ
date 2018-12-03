@@ -1,12 +1,12 @@
-pgas <- function(M, N, K,
+pgas <- function(M, N, K, TT,
                  y, yz, Za,
                  par_prior,
                  par_inits) {
-  T <- length(y)
+  T <- TT
 
   sig_sq_xa <- numeric(M)
   phi_xa    <- numeric(M)
-  bet_xa    <- matrix(0, nrow = length(par_inits[[4]]), ncol = M)
+  bet_xa    <- matrix(0, nrow = length(par_inits[[3]]), ncol = M)
 
   regs       <- matrix(0, nrow = T - 1, ncol = ncol(Za) + 1)
   Za          <- as.matrix(Za)
@@ -22,11 +22,12 @@ pgas <- function(M, N, K,
   prior_a     <- par_prior[1]
   prior_b     <- par_prior[2]
   # Initialize the states by running a PF
-  cpfOut <- cBPF_as(y = y, N = N, Za = Za,
-                   sig_sq_xa = sig_sq_xa[1],
-                   phi_xa = phi_xa[1],
-                   bet_xa = bet_xa[, 1, drop = F],
-                   x_r = X[1, ])
+  cpfOut <- cBPF_as(y = y, yz = yz, Za = Za,
+                    N = N, TT = T, K = K,
+                    sig_sq_xa = sig_sq_xa[1],
+                    phi_xa = phi_xa[1],
+                    bet_xa = bet_xa[, 1, drop = F],
+                    x_r = X[1, ])
   w      <- cpfOut[[2]][, T]
   b      <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
   X[1, ] <- cpfOut[[1]][b, ]
@@ -34,9 +35,8 @@ pgas <- function(M, N, K,
   for (m in 2:M) {
     how_long(m, M)
     # Run GIBBS PART
-    err_sig_sq_x <- X[m - 1, 2:T] - f(xtt = X[m - 1, 1:(T - 1)],
-                                      z = Za[2:T, , drop = F],
-                                      t = 1:(T - 1),
+    err_sig_sq_x <- X[m - 1, 2:T] - f(xa_tt = X[m - 1, 1:(T - 1)],
+                                      za = Za[2:T, , drop = F],
                                       phi_xa = phi_xa[m - 1],
                                       bet_xa = bet_xa[, m - 1])
     sig_sq_xa[m]  <- 1/rgamma(n = 1, prior_a + (T - 1)/2,
@@ -64,11 +64,12 @@ pgas <- function(M, N, K,
     # retval <- sweep(retval, 2, mean, "+")
     #
     # Run CPF-AS PART
-    cpfOut <- cBPF_as(y = y, N = N, Za = Za,
-                     sig_sq_xa = sig_sq_xa[m],
-                     phi_xa = phi_xa[m],
-                     bet_xa = bet_xa[, m, drop = F],
-                     x_r = X[m - 1,])
+    cpfOut <- cBPF_as(y = y, yz = yz, Za = Za,
+                      N = N, TT = T, K = K,
+                      sig_sq_xa = sig_sq_xa[m],
+                      phi_xa = phi_xa[m],
+                      bet_xa = bet_xa[, m, drop = F],
+                      x_r = X[m - 1,])
     w      <- cpfOut[[2]][, T]
     # draw b
     b <- sample.int(n = N, size = 1, replace = TRUE, prob = w)

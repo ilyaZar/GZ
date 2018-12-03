@@ -1,6 +1,6 @@
-cBPF_as <- function(y, N, Za, sig_sq_xa, phi_xa, bet_xa, x_r) {
+cBPF_as <- function(y, yz, Za, K, N, TT, sig_sq_xa, phi_xa, bet_xa, x_r) {
   # DATA CONTAINERS
-  T <- length(y)                      # time is from t = 0 to t = T (see below)
+  T <- TT
   x <- matrix(0, nrow = N, ncol = T)  # Particles
   a <- matrix(0, nrow = N, ncol = T)  # Ancestor indices
   w <- matrix(0, nrow = N, ncol = T)  # Weights
@@ -19,7 +19,8 @@ cBPF_as <- function(y, N, Za, sig_sq_xa, phi_xa, bet_xa, x_r) {
               phi_xa = phi_xa, bet_xa = bet_xa)
   x[, 1]  <- eval_f[a[, 1]] + sqrt(sig_sq_xa)*rnorm(N)
   # weighting
-  w_log   <- -1/(2*bet_sq_y*exp(x[, 1]))*(y[1])^2 - 0.5 * x[, 1]
+  w_log   <- w_xa(xa = x[, 1], y = y[1, ], yz = yz[1, ],
+                  B = 150, P = 2.5, Q = 3.5, K = K)
   w_max   <- max(w_log)
   w_tilde <- exp(w_log - w_max)
   w[, 1]  <- w_tilde/sum(w_tilde)
@@ -42,10 +43,11 @@ cBPF_as <- function(y, N, Za, sig_sq_xa, phi_xa, bet_xa, x_r) {
     w_as       <- w_as/sum(w_as)
     a[N, t]    <- sample.int(n = N, size = 1, replace = TRUE, prob = w_as)
     # weighting
-    w_log      <- -1/(2*bet_sq_y*exp(x[, t]))*(y[t])^2 - 0.5 * x[, t]
-    w_max      <- max(w_log)
-    w_tilde    <- exp(w_log - w_max)
-    w[, t]     <- w_tilde/sum(w_tilde)
+    w_log   <- w_xa(xa = x[, t], y = y[t, ], yz = yz[t, ],
+                    B = 150, P = 2.5, Q = 3.5, K = K)
+    w_max   <- max(w_log)
+    w_tilde <- exp(w_log - w_max)
+    w[, t]  <- w_tilde/sum(w_tilde)
   }
   # trajectories
   ind <- a[, T]
