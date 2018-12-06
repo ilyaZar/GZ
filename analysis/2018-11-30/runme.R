@@ -7,11 +7,11 @@
 #
 #
 rm(list = ls())
-testrun <- F
+testrun <- T
 if (testrun) {
   set.seed(123)
 } else {
-  set.seed(123)
+  # set.seed(123)
 }
 
 source("./R/00_lib_load.R")
@@ -32,10 +32,7 @@ source("./R/02_pgas.R")
 res <- pgas(N = num_particles, M = num_mcmc, K = KK, TT = TT,
             y = y_t, yz = yz_t, Za = z_t,
             par_prior = c(prior_a, prior_b),
-            par_inits = list(init_sig_sq_x,
-                             init_phi_x,
-                             init_bet_x)
-)
+            par_inits = par_init)
 #
 #
 #

@@ -2,26 +2,26 @@ pgas <- function(M, N, K, TT,
                  y, yz, Za,
                  par_prior,
                  par_inits) {
+  # Initialize data containers
   T <- TT
+  w <- numeric(N)
+  X <- matrix(0, nrow = M, ncol = T)
 
   sig_sq_xa <- numeric(M)
   phi_xa    <- numeric(M)
-  bet_xa    <- matrix(0, nrow = length(par_inits[[3]]), ncol = M)
+  bet_xa    <- matrix(0, nrow = length(par_inits[[1]][[3]]), ncol = M)
 
   regs       <- matrix(0, nrow = T - 1, ncol = ncol(Za) + 1)
-  Za          <- as.matrix(Za)
+  Za         <- as.matrix(Za)
   regs[, -1] <- Za[2:T, ]
-
-  w <- numeric(N)
-  X <- matrix(0, nrow = M, ncol = T)
-  #  Initialize the parameters
-  sig_sq_xa[1] <- par_inits[[1]]
-  phi_xa[1]    <- par_inits[[2]]
-  bet_xa[, 1]  <- par_inits[[3]]
+  #  Initialize parameters
+  sig_sq_xa[1] <- par_inits[[1]][[1]]
+  phi_xa[1]    <- par_inits[[1]][[2]]
+  bet_xa[, 1]  <- par_inits[[1]][[3]]
   #  Initialize priors
   prior_a     <- par_prior[1]
   prior_b     <- par_prior[2]
-  # Initialize the states by running a PF
+  # Initialize states by running a PF
   cpfOut <- cBPF_as(y = y, yz = yz, Za = Za,
                     N = N, TT = T, K = K,
                     sig_sq_xa = sig_sq_xa[1],

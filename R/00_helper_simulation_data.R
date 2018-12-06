@@ -1,16 +1,25 @@
-generate_data <- function(T, K, num_incs, sig_sq_xa,
-                          phi_xa, bet_xa, par_levels) {
+generate_data <- function(T, K, num_incs,
+                          par_true,
+                          par_levels) {
   xa      <- rep(0, T)
-  # yt      <- matrix(0, nrow = T, ncol = num_incs)
-  # yz      <- matrix(0, nrow = T, ncol = K)
-  dim_reg <- length(bet_xa)
+  xb      <- rep(0, T)
 
-  za <- matrix(rnorm(T*length(bet_xa)), nrow = T, ncol = dim_reg)
+  sig_sq_xa <- par_true[[1]][[1]]
+  phi_xa    <- par_true[[1]][[2]]
+  bet_xa    <- par_true[[1]][[3]]
+  sig_sq_xb <- par_true[[2]][[1]]
+  phi_xb    <- par_true[[2]][[2]]
+  bet_xb    <- par_true[[2]][[3]]
+
+  dim_reg_a <- length(bet_xa)
+  dim_reg_b <- length(bet_xa)
+
+  za <- matrix(rnorm(T*length(bet_xa)), nrow = T, ncol = dim_reg_a)
   # za[, 1] <- 1
-  par_level_adjust <- za[, -dim_reg, drop = FALSE] %*% bet_xa[-dim_reg]
+  par_level_adjust <- za[, -dim_reg_a, drop = FALSE] %*% bet_xa[-dim_reg_a]
   par_level_adjust <- par_levels[1] * (1 - phi_xa) - par_level_adjust
-  par_level_adjust <- par_level_adjust/bet_xa[dim_reg]
-  za[, dim_reg]    <- par_level_adjust
+  par_level_adjust <- par_level_adjust/bet_xa[dim_reg_a]
+  za[, dim_reg_a]    <- par_level_adjust
 
   xinit <- 0
   xa[1] <- f(xa_tt = xinit, za = za[1, ], phi_xa = phi_xa, bet_xa = bet_xa)
