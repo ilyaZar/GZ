@@ -11,7 +11,7 @@ testrun <- T
 if (testrun) {
   set.seed(123)
 } else {
-  # set.seed(123)
+  set.seed(123)
 }
 
 source("./R/00_lib_load.R")

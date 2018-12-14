@@ -27,7 +27,7 @@ pgas <- function(M, N, K, TT,
                     sig_sq_xa = sig_sq_xa[1],
                     phi_xa = phi_xa[1],
                     bet_xa = bet_xa[, 1, drop = F],
-                    x_r = X[1, ])
+                    xa_r = X[1, ])
   w      <- cpfOut[[2]][, T]
   b      <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
   X[1, ] <- cpfOut[[1]][b, ]
@@ -35,10 +35,10 @@ pgas <- function(M, N, K, TT,
   for (m in 2:M) {
     how_long(m, M)
     # Run GIBBS PART
-    err_sig_sq_x <- X[m - 1, 2:T] - f(xa_tt = X[m - 1, 1:(T - 1)],
-                                      za = Za[2:T, , drop = F],
-                                      phi_xa = phi_xa[m - 1],
-                                      bet_xa = bet_xa[, m - 1])
+    err_sig_sq_x <- X[m - 1, 2:T] - f(x_tt = X[m - 1, 1:(T - 1)],
+                                      z = Za[2:T, , drop = F],
+                                      phi_x = phi_xa[m - 1],
+                                      bet_x = bet_xa[, m - 1])
     sig_sq_xa[m]  <- 1/rgamma(n = 1, prior_a + (T - 1)/2,
                              prior_b + crossprod(err_sig_sq_x)/2)
     # err_bet_sq_y <- y^2 * exp(-X[m - 1,])
@@ -69,7 +69,7 @@ pgas <- function(M, N, K, TT,
                       sig_sq_xa = sig_sq_xa[m],
                       phi_xa = phi_xa[m],
                       bet_xa = bet_xa[, m, drop = F],
-                      x_r = X[m - 1,])
+                      xa_r = X[m - 1,])
     w      <- cpfOut[[2]][, T]
     # draw b
     b <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
