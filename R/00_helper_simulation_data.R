@@ -1,7 +1,8 @@
 generate_data <- function(T, K, num_incs,
                           par_true,
                           x_levels,
-                          x_sd) {
+                          x_sd,
+                          seq_exp, seq_cept) {
   xa <- rep(0, T)
   xb <- rep(0, T)
   xp <- rep(0, T)
@@ -20,29 +21,36 @@ generate_data <- function(T, K, num_incs,
   phi_xq    <- par_true[[4]][[2]]
   bet_xq    <- par_true[[4]][[3]]
 
-  dim_reg_a <- length(bet_xa)
-  dim_reg_b <- length(bet_xb)
-  dim_reg_p <- length(bet_xp)
-  dim_reg_q <- length(bet_xq)
-
   res_a <- generate_x_z(phi_x = phi_xa, sig_sq_x = sig_sq_xa, bet_x = bet_xa,
-               x_level = x_levels[1], T = T,
-               process_exp = TRUE, intercept = FALSE, x_init = FALSE)
+                        x_level = x_levels[1],
+                        process_exp = seq_exp[1],
+                        intercept = seq_cept[1],
+                        x_init = TRUE,
+                        T = T)
   xa    <- res_a[[1]]
   za    <- res_a[[2]]
   res_b <- generate_x_z(phi_x = phi_xb, sig_sq_x = sig_sq_xb, bet_x = bet_xb,
-                        x_level = x_levels[2], T = T,
-                        process_exp = FALSE, intercept = FALSE, x_init = TRUE)
+                        x_level = x_levels[2],
+                        process_exp = seq_exp[2],
+                        intercept = seq_cept[2],
+                        x_init = TRUE,
+                        T = T)
   xb    <- res_b[[1]]
   zb    <- res_b[[2]]
   res_p <- generate_x_z(phi_x = phi_xp, sig_sq_x = sig_sq_xp, bet_x = bet_xp,
-                        x_level = x_levels[3], T = T,
-                        process_exp = TRUE, intercept = FALSE, x_init = TRUE)
+                        x_level = x_levels[3],
+                        process_exp = seq_exp[3],
+                        intercept = seq_cept[3],
+                        x_init = TRUE,
+                        T = T)
   xp    <- res_p[[1]]
   zp    <- res_p[[2]]
   res_q <- generate_x_z(phi_x = phi_xq, sig_sq_x = sig_sq_xq, bet_x = bet_xq,
-                        x_level = x_levels[4], T = T,
-                        process_exp = FALSE, intercept = FALSE, x_init = TRUE)
+                        x_level = x_levels[4],
+                        process_exp = seq_exp[4],
+                        intercept = seq_cept[4],
+                        x_init = TRUE,
+                        T = T)
   xq <- res_q[[1]]
   zq <- res_q[[2]]
 
@@ -73,11 +81,14 @@ parameter_fct_log_norm_test <- function(log_mu, log_sd) {
   return(list(exp_mu, exp_var))
 }
 generate_x_z <- function(phi_x, sig_sq_x, bet_x,
-                         x_level, T,
-                         process_exp, intercept, x_init) {
-  # if (process_exp) {
-  #   x_level <- log(x_level)
-  # }
+                         x_level,
+                         process_exp,
+                         intercept,
+                         x_init,
+                         T) {
+  if (process_exp) {
+    x_level <- log(x_level)
+  }
   dim_reg <- length(bet_x)
   x <- rep(0, T)
 

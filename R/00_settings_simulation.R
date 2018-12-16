@@ -108,13 +108,15 @@ if (testrun) {
 }
 KK       <- 10     # Number of income classes - 1
 num_obs  <- 10e4   # Number of total individual incomes
-par_levels <- c(log(1.5), 150, log(2.5), 3.5)
+par_levels <- c(1.5, 150, 2.5, 3.5)
 dataSim <- generate_data(par_true = par_true,
                          T = TT,
                          K = KK,
                          num_incs = num_obs,
                          x_levels = par_levels,
-                         x_sd = par_sd)
+                         x_sd = par_sd,
+                         seq_exp  = c(T, F, T, F),
+                         seq_cept = c(F, F, F, F))
 x_t   <- dataSim[[1]][[1]]
 xb_t  <- dataSim[[1]][[2]]
 xp_t  <- dataSim[[1]][[3]]
