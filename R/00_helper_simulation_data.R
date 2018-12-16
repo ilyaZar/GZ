@@ -25,7 +25,7 @@ generate_data <- function(T, K, num_incs,
                         x_level = x_levels[1],
                         process_exp = seq_exp[1],
                         intercept = seq_cept[1],
-                        x_init = TRUE,
+                        x_init = F,
                         T = T)
   xa    <- res_a[[1]]
   za    <- res_a[[2]]
@@ -68,7 +68,7 @@ generate_data <- function(T, K, num_incs,
                       shape2 = xp,
                       shape3 = xq),
                  nrow = T, ncol = num_incs)
-  return(list(list(xa, xb, xp, xq), yraw, yz, za)) # , zb
+  return(list(yraw, yz, list(xa, xb, xp, xq), list(za, zb, zp, zq)))
 }
 parameter_fct_log_norm <- function(exp_mu, exp_sd) {
   log_mu  <- log(exp_mu/sqrt( 1 + (exp_sd^2/exp_mu^2) ))

@@ -117,19 +117,19 @@ dataSim <- generate_data(par_true = par_true,
                          x_sd = par_sd,
                          seq_exp  = c(T, F, T, F),
                          seq_cept = c(F, F, F, F))
-x_t   <- dataSim[[1]][[1]]
-xb_t  <- dataSim[[1]][[2]]
-xp_t  <- dataSim[[1]][[3]]
-xq_t  <- dataSim[[1]][[4]]
-y_raw <- dataSim[[2]]
-yz_t  <- dataSim[[3]]
+y_raw <- dataSim[[1]]
+yz_t  <- dataSim[[2]]
 y_t   <- matrix(0, nrow = TT, ncol = KK)
 for (t in 1:TT) {
   ncut <- cut(y_raw[t, ], breaks = yz_t[t, ])
   y_t[t, ] <- as.vector(table(ncut))
 }
 yz_t <- yz_t[, -(KK + 1)]
-z_t  <- dataSim[[4]]
+xa_t <- dataSim[[3]][[1]]
+xb_t <- dataSim[[3]][[2]]
+xp_t <- dataSim[[3]][[3]]
+xq_t <- dataSim[[3]][[4]]
+za_t <- dataSim[[4]][[1]]
 # Hyperparameters for the inverse gamma priors (uninformative)
 prior_a <- 0.01
 prior_b <- 0.01
