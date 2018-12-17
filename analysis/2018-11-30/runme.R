@@ -7,7 +7,7 @@
 #
 #
 rm(list = ls())
-testrun <- T
+testrun <- F
 if (testrun) {
   set.seed(123)
 } else {

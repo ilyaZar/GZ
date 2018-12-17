@@ -25,7 +25,7 @@ generate_data <- function(T, K, num_incs,
                         x_level = x_levels[1],
                         process_exp = seq_exp[1],
                         intercept = seq_cept[1],
-                        x_init = F,
+                        x_init = TRUE,
                         T = T)
   xa    <- res_a[[1]]
   za    <- res_a[[2]]
