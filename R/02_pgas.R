@@ -1,7 +1,8 @@
 pgas <- function(M, N, K, TT,
-                 y, yz, Za,
+                 y, yz, Za, Zb, Zp, Zq,
                  par_prior,
-                 par_inits) {
+                 par_inits,
+                 filtering = TRUE) {
   # Initialize data containers
   T <- TT
   w <- numeric(N)
@@ -10,14 +11,23 @@ pgas <- function(M, N, K, TT,
   sig_sq_xa <- numeric(M)
   phi_xa    <- numeric(M)
   bet_xa    <- matrix(0, nrow = length(par_inits[[1]][[3]]), ncol = M)
+  sig_sq_xb <- numeric(M)
+  phi_xb    <- numeric(M)
+  bet_xb    <- matrix(0, nrow = length(par_inits[[2]][[3]]), ncol = M)
 
-  regs       <- matrix(0, nrow = T - 1, ncol = ncol(Za) + 1)
-  Za         <- as.matrix(Za)
-  regs[, -1] <- Za[2:T, ]
+  regs_a       <- matrix(0, nrow = T - 1, ncol = ncol(Za) + 1)
+  Za           <- as.matrix(Za)
+  regs_a[, -1] <- Za[2:T, ]
+  regs_b       <- matrix(0, nrow = T - 1, ncol = ncol(Zb) + 1)
+  Zb           <- as.matrix(Zb)
+  regs_b[, -1] <- Zb[2:T, ]
   #  Initialize parameters
   sig_sq_xa[1] <- par_inits[[1]][[1]]
   phi_xa[1]    <- par_inits[[1]][[2]]
   bet_xa[, 1]  <- par_inits[[1]][[3]]
+  sig_sq_xb[1] <- par_inits[[2]][[1]]
+  phi_xb[1]    <- par_inits[[2]][[2]]
+  bet_xb[, 1]  <- par_inits[[2]][[3]]
   #  Initialize priors
   prior_a     <- par_prior[1]
   prior_b     <- par_prior[2]
@@ -27,13 +37,14 @@ pgas <- function(M, N, K, TT,
                     sig_sq_xa = sig_sq_xa[1],
                     phi_xa = phi_xa[1],
                     bet_xa = bet_xa[, 1, drop = F],
-                    xa_r = X[1, ])
+                    xa_r = X[1, ],
+                    filtering = filtering)
   w      <- cpfOut[[2]][, T]
   b      <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
   X[1, ] <- cpfOut[[1]][b, ]
   # Run MCMC loop
   for (m in 2:M) {
-    how_long(m, M)
+    how_long(m, M, len = M)
     # Run GIBBS PART
     err_sig_sq_x <- X[m - 1, 2:T] - f(x_tt = X[m - 1, 1:(T - 1)],
                                       z = Za[2:T, , drop = F],
@@ -41,21 +52,36 @@ pgas <- function(M, N, K, TT,
                                       bet_x = bet_xa[, m - 1])
     sig_sq_xa[m]  <- 1/rgamma(n = 1, prior_a + (T - 1)/2,
                              prior_b + crossprod(err_sig_sq_x)/2)
-    # err_bet_sq_y <- y^2 * exp(-X[m - 1,])
-    # phi_xa[m]     <- phi_xa[m - 1]
-    # bet_xa[, m]   <- bet_xa[, m - 1]
-    # sig_sq_xa[m]  <- true_sigSQ_x
-    regs[, 1]    <- X[m - 1, 1:(T - 1)]
+    regs_a[, 1]  <- X[m - 1, 1:(T - 1)]
     x_lhs        <- X[m - 1, 2:T]
-    Omega_xa     <- solve(crossprod(regs, regs)/sig_sq_xa[m] + 1)
-    mu_xa        <- Omega_xa %*% (crossprod(regs, x_lhs)/sig_sq_xa[m])
+    Omega_xa     <- solve(crossprod(regs_a, regs_a)/sig_sq_xa[m] + 1)
+    mu_xa        <- Omega_xa %*% (crossprod(regs_a, x_lhs)/sig_sq_xa[m])
     beta_xa      <- rmvnorm(n = 1, mean = mu_xa, sigma = Omega_xa)
-    phi_xa[m]     <- beta_xa[1]  # true_phi_x
-    bet_xa[, m]   <- beta_xa[-1] # true_bet_x
+    phi_xa[m]    <- beta_xa[1]  # true_phi_x
+    bet_xa[, m]  <- beta_xa[-1] # true_bet_x
     while (near(abs(phi_xa[m]), 1, tol = 0.01) | abs(phi_xa[m]) > 1) {
     beta_xa      <- rmvnorm(n = 1, mean = mu_xa, sigma = Omega_xa)
-    phi_xa[m]     <- beta_xa[1]  # true_phi_x
-    bet_xa[, m]   <- beta_xa[-1] # true_bet_x
+    phi_xa[m]    <- beta_xa[1]  # true_phi_x
+    bet_xa[, m]  <- beta_xa[-1] # true_bet_x
+    }
+    err_sig_sq_x <- xb_t[2:T]     - f(x_tt = xb_t[1:(T - 1)],
+                  # X[m - 1, 2:T] - f(x_tt =  X[m - 1, 1:(T - 1)]
+                                      z = Zb[2:T, , drop = F],
+                                      phi_x = phi_xb[m - 1],
+                                      bet_x = bet_xb[, m - 1])
+    sig_sq_xb[m]  <- 1/rgamma(n = 1, prior_a + (T - 1)/2,
+                              prior_b + crossprod(err_sig_sq_x)/2)
+    regs_b[, 1]  <- xb_t[1:(T - 1)] # X[m - 1, 1:(T - 1)]
+    x_lhs        <- xb_t[2:T] # X[m - 1, 2:T]
+    Omega_xb     <- solve(crossprod(regs_b, regs_b)/sig_sq_xb[m] + 1)
+    mu_xb        <- Omega_xb %*% (crossprod(regs_b, x_lhs)/sig_sq_xb[m])
+    beta_xb      <- rmvnorm(n = 1, mean = mu_xb, sigma = Omega_xb)
+    phi_xb[m]    <- beta_xb[1]  # true_phi_x
+    bet_xb[, m]  <- beta_xb[-1] # true_bet_x
+    while (near(abs(phi_xb[m]), 1, tol = 0.01) | abs(phi_xb[m]) > 1) {
+      beta_xb      <- rmvnorm(n = 1, mean = mu_xb, sigma = Omega_xb)
+      phi_xb[m]    <- beta_xb[1]  # true_phi_x
+      bet_xb[, m]  <- beta_xb[-1] # true_bet_x
     }
     #
     # R <- chol(sigma, pivot = TRUE)
@@ -69,14 +95,18 @@ pgas <- function(M, N, K, TT,
                       sig_sq_xa = sig_sq_xa[m],
                       phi_xa = phi_xa[m],
                       bet_xa = bet_xa[, m, drop = F],
-                      xa_r = X[m - 1,])
+                      xa_r = X[m - 1,],
+                      filtering = filtering)
     w      <- cpfOut[[2]][, T]
     # draw b
     b <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
     X[m, ] <- cpfOut[[1]][b, ]
   }
-  return(list(sigma_sq_x = sig_sq_xa,
+  return(list(sigma_sq_xa = sig_sq_xa,
               phi_xa = phi_xa,
               bet_xa = bet_xa,
+              sigma_sq_xb = sig_sq_xb,
+              phi_xb = phi_xb,
+              bet_xb = bet_xb,
               xtraj = X))
 }

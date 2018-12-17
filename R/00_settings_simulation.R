@@ -49,20 +49,20 @@ if (testrun) {
 } else {
   num_particles <- 50  # Number of particles used in the conditional BPF
   TT <- 1000           # Length of data record
-  num_mcmc <- 2100     # Number of iterations in the MCMC samplers
-  burnin   <- 100      # Number of interations to burn
+  num_mcmc <- 500     # Number of iterations in the MCMC samplers
+  burnin   <- 0      # Number of interations to burn
   # Generate data
   # I. xa_t process:
   true_sig_sq_xa <- 0.2      # True latent state process noise variance
   true_phi_xa    <- 0.8      # True autoregressive parameter for states
-  true_bet_xa    <- c(-2.5, 3) # True regressor coefficients for states
+  true_bet_xa    <- c(-2.5, 3, 4) # True regressor coefficients for states
   # Initialization for the parameters
-  # init_sig_sq_xa <- true_sig_sq_xa
-  # init_phi_xa    <- true_phi_xa
-  # init_bet_xa    <- true_bet_xa
-  init_sig_sq_xa <- 1
-  init_phi_xa    <- -0.9
-  init_bet_xa    <- -sign(true_bet_xa)*0
+  init_sig_sq_xa <- true_sig_sq_xa
+  init_phi_xa    <- true_phi_xa
+  init_bet_xa    <- true_bet_xa
+  # init_sig_sq_xa <- 1
+  # init_phi_xa    <- -0.9
+  # init_bet_xa    <- -sign(true_bet_xa)*0
   # II. xb_t process:
   true_sig_sq_xb <- 5
   true_phi_xb    <- 0.5
@@ -130,6 +130,9 @@ xb_t <- dataSim[[3]][[2]]
 xp_t <- dataSim[[3]][[3]]
 xq_t <- dataSim[[3]][[4]]
 za_t <- dataSim[[4]][[1]]
+zb_t <- dataSim[[4]][[2]]
+zp_t <- dataSim[[4]][[3]]
+zq_t <- dataSim[[4]][[4]]
 # Hyperparameters for the inverse gamma priors (uninformative)
 prior_a <- 0.01
 prior_b <- 0.01
