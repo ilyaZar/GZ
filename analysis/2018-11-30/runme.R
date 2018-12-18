@@ -7,11 +7,11 @@
 #
 #
 rm(list = ls())
-testrun <- F
+testrun <- T
 if (testrun) {
   set.seed(123)
 } else {
-  set.seed(347293)
+  set.seed(123)
 }
 
 source("./R/00_lib_load.R")
