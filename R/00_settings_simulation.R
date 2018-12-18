@@ -55,7 +55,7 @@ if (testrun) {
   # I. xa_t process:
   true_sig_sq_xa <- 0.2      # True latent state process noise variance
   true_phi_xa    <- 0.8      # True autoregressive parameter for states
-  true_bet_xa    <- c(-2.5, 3, 4) # True regressor coefficients for states
+  true_bet_xa    <- c(-2.5, 3) # True regressor coefficients for states
   # Initialization for the parameters
   init_sig_sq_xa <- true_sig_sq_xa
   init_phi_xa    <- true_phi_xa
