@@ -1,8 +1,11 @@
-cBPF_as <- function(y, yz, Za, K, N, TT, sig_sq_xa, phi_xa, bet_xa, xa_r,
+cBPF_as <- function(y, yz, Za, K, N, TT,
+                    sig_sq_xa, phi_xa, bet_xa, xa_r,
+                    sig_sq_xb, phi_xb, bet_xb, xb_r,
                     filtering = TRUE) {
   T <- TT
   if (!filtering) {
     xa <- matrix(rep(log(xa_t), times = N), nrow = N, ncol = T, byrow = TRUE)
+    xb <- matrix(rep(xb_t, times = N), nrow = N, ncol = T, byrow = TRUE)
     w  <- matrix(1/N, nrow = N, ncol = T)
     return(list(xa, w))
   }

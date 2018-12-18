@@ -39,7 +39,7 @@ plot(res$sigma_sq_xb, type = "l")
 plot(res$sigma_sq_xb[burnin:num_mcmc], type = "l")
 
 plot(res$phi_xb, type = "l")
-for (i in 1:length(res$bet_xa[, 1])) {
+for (i in 1:length(res$bet_xb[, 1])) {
   plot(res$bet_xb[i, ], type = "l")
 }
 plot(res$phi_xb[burnin:num_mcmc], type = "l")

@@ -7,7 +7,7 @@
 #
 #
 rm(list = ls())
-testrun <- F
+testrun <- T
 if (testrun) {
   set.seed(123)
 } else {
@@ -33,7 +33,7 @@ res <- pgas(N = num_particles, M = num_mcmc, K = KK, TT = TT,
             y = y_t, yz = yz_t, Za = za_t, Zb = zb_t, Zp = zp_t, Zq = zq_t,
             par_prior = c(prior_a, prior_b),
             par_inits = par_init,
-            filtering = F)
+            filtering = T)
 #
 #
 #
