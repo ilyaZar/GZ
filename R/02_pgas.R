@@ -29,11 +29,14 @@ pgas <- function(M, N, K, TT,
   sig_sq_xb[1] <- par_inits[[2]][[1]]
   phi_xb[1]    <- par_inits[[2]][[2]]
   bet_xb[, 1]  <- par_inits[[2]][[3]]
+  #  Initialize state values (1st conditioning trajectory)
+  Xa[1, ] <- 0
+  Xb[1, ] <- 140
   #  Initialize priors
   prior_a     <- par_prior[1]
   prior_b     <- par_prior[2]
   # Initialize states by running a PF
-  cpfOut <- cBPF_as(y = y, yz = yz, Za = Za,
+  cpfOut <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
                     N = N, TT = T, K = K,
                     sig_sq_xa = sig_sq_xa[1],
                     phi_xa = phi_xa[1],
@@ -96,8 +99,8 @@ pgas <- function(M, N, K, TT,
     # retval <- sweep(retval, 2, mean, "+")
     #
     # Run CPF-AS PART
-    cpfOut <- cBPF_as(y = y, yz = yz, Za = Za,
-                      N = N, TT = T, K = K,
+    cpfOut <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
+                       N = N, TT = T, K = K,
                       sig_sq_xa = sig_sq_xa[m],
                       phi_xa = phi_xa[m],
                       bet_xa = bet_xa[, m, drop = F],
@@ -119,5 +122,5 @@ pgas <- function(M, N, K, TT,
               sigma_sq_xb = sig_sq_xb,
               phi_xb = phi_xb,
               bet_xb = bet_xb,
-              xtraj = Xa))
+              xtraj  = list(Xa, Xb)))
 }
