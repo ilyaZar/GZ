@@ -1,14 +1,32 @@
-my_ws <- cumsum(seq(from = 0.1, to = 0.5, by = 0.1))
-my_ws <- my_ws/sum(my_ws)
+regs_a[, 1]  <- log(xa_t[1:(T - 1)])
+x_lhs        <- log(xa_t[2:T])
 
-m          <- -1/2 * helper_as(M = m2, x = m1)/10000
-w_log_as   <- log(my_ws) + m
-w_max_as   <- max(w_log_as)
-w_tilde_as <- exp(w_log_as - w_max_as)
-w_as1       <- w_tilde_as/sum(w_tilde_as)
+sig_sq_new <- true_sig_sq_xa # sig_sq_xa[m]
 
-m          <- exp(-1/2 * helper_as(M = m2, x = m1)/10000)
-w_as       <- my_ws*m
-w_as2      <- w_as/sum(w_as)
+Omega_xa     <- solve(crossprod(regs_a, regs_a)/sig_sq_xa[m] + prior_VCM_xa)
+mu_xa        <- Omega_xa %*% (crossprod(regs_a, x_lhs)/sig_sq_xa[m])
 
-identical(round(w_as1, digits = 8), round(w_as2, digits = 8))
+Omega_xa
+mu_xa
+# Omega_xa1 <- solve(crossprod(regs_a, regs_a)/sig_sq_xa_new)
+# Omega_xa2 <- solve(crossprod(regs_a, regs_a)/sig_sq_xa_new + 1)
+# Omega_xa3 <- solve(crossprod(regs_a, regs_a)/sig_sq_xa_new + prior_VCM_xa)
+# Omega_xa4 <- solve(crossprod(regs_a, regs_a)/sig_sq_xa_new + prior_VCM_xa/10)
+# Omega_xa5 <- solve(crossprod(regs_a, regs_a)/sig_sq_xa_new + prior_VCM_xa/100)
+# Omega_xa6 <- solve(crossprod(regs_a, regs_a)/sig_sq_xa_new + prior_VCM_xa/1000)
+#
+# Omega_xa1 %*% (crossprod(regs_a, x_lhs)/sig_sq_xa_new)
+# Omega_xa2 %*% (crossprod(regs_a, x_lhs)/sig_sq_xa_new)
+# Omega_xa3 %*% (crossprod(regs_a, x_lhs)/sig_sq_xa_new)
+# Omega_xa4 %*% (crossprod(regs_a, x_lhs)/sig_sq_xa_new)
+# Omega_xa5 %*% (crossprod(regs_a, x_lhs)/sig_sq_xa_new)
+# Omega_xa6 %*% (crossprod(regs_a, x_lhs)/sig_sq_xa_new)
+#
+# kappa(crossprod(regs_a, regs_a)/sig_sq_xa_new + prior_VCM_xa)
+# kappa(crossprod(regs_a, regs_a)/sig_sq_xa_new + 1)
+#
+# solve(crossprod(regs_a, regs_a)/sig_sq_xa_new + prior_VCM_xa)
+# solve(crossprod(regs_a, regs_a)/sig_sq_xa_new + 1)
+#
+# (crossprod(regs_a, regs_a)/sig_sq_xa_new + prior_VCM_xa) %*% Omega_xa
+# (crossprod(regs_a, regs_a)/sig_sq_xa_new + 1) %*% Omega_xa

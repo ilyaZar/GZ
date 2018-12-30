@@ -1,0 +1,188 @@
+analyse_mcmc_convergence <- function(mcmc_sims, states = NULL,
+                                     true_vals, par_names, start_vals,
+                                     burn,
+                                     plots = FALSE,
+                                     ggplots = FALSE,
+                                     plot_delay = 1,
+                                     update_rates = FALSE,
+                                     table_view = FALSE,
+                                     table_save = FALSE,
+                                     table_path = NULL) {
+  if (update_rates) {
+    if (is.null(states)) error("States required for update rates not provided!")
+  }
+  num_par         <- dim(mcmc_sims)[1]
+  num_mcmc        <- dim(mcmc_sims)[2]
+  posterior_means <- rowMeans(mcmc_sims[, burn:num_mcmc])
+   if (ggplots) {
+     mcmc_sims_df        <- data.frame(cbind(1:num_mcmc, t(mcmc_sims)))
+     # mcmc_sims_obj       <- coda::mcmc(mcmc_sims_df)
+     names(mcmc_sims_df) <- c("num_mcmc", par_names)
+  }
+  #
+  #
+  #
+  #
+  #
+  if (plots) {
+    if (ggplots) {
+        for (i in 1:num_par) {
+        par_to_plot <- parse(text = par_names[i])
+        hist_plot <- ggplot(data = subset(mcmc_sims_df, num_mcmc >= burn)) +
+          geom_density(mapping = aes_string(x = par_names[i])) +
+          geom_histogram(aes(x = eval(par_to_plot),
+                             y = ..density..),
+                         binwidth = 0.025,
+                         alpha = 0.5) +
+          geom_vline(xintercept = posterior_means[i], colour = "red") +
+          geom_vline(xintercept = true_vals[i], colour = "green")
+
+        acfs    <- acf(mcmc_sims_df[par_names[i]], plot = FALSE)
+        acfs_df <- with(acfs, data.frame(lag, acf))
+
+        trace_plot_full <- ggplot(data = mcmc_sims_df,
+                                  mapping = aes(x = num_mcmc,
+                                                y = eval(par_to_plot))) +
+          geom_line() +
+          geom_hline(yintercept = posterior_means[i], colour = "red") +
+          geom_hline(yintercept = true_vals[i], colour = "green")
+
+        trace_plot_burn <- ggplot(data = subset(mcmc_sims_df,
+                                                num_mcmc >= burn),
+                                  mapping = aes(x = num_mcmc,
+                                                y = eval(par_to_plot))) +
+          geom_line() +
+          geom_hline(yintercept = posterior_means[i], colour = "red") +
+          geom_hline(yintercept = true_vals[i], colour = "green")
+
+        acf_plot <- ggplot(data = acfs_df,
+                           mapping = aes(x = lag, y = acf)) +
+          geom_hline(aes(yintercept = 0)) +
+          geom_segment(mapping = aes(xend = lag, yend = 0))
+
+        grid.arrange(hist_plot,
+                     trace_plot_full,
+                     acf_plot,
+                     trace_plot_burn,
+                     nrow = 2)
+      }
+    } else{
+      par(mfrow = c(2, 2))
+      for (i in 1:num_par) {
+        hist(mcmc_sims[i, burn:num_mcmc],
+             xlab = par_names[i],
+             main = "posterior density")
+        abline(v = true_vals[i], col = "green")
+        abline(v = posterior_means[i], col = "red")
+
+        plot(mcmc_sims[i, burn:num_mcmc], type = "l",
+             xlab = "mcmc iteration",
+             ylab = paste(par_names[i], "value", sep = " "),
+             main = paste("trace after burnin", burn, sep = ": "))
+        abline(h = true_vals[i], col = "green")
+        abline(h = posterior_means[i], col = "red")
+
+        coda::autocorr.plot(mcmc_sims[i, ], auto.layout = FALSE)
+
+        plot(mcmc_sims[i, ], type = "l",
+             xlab = "mcmc iteration",
+             ylab = paste(par_names[i], "value", sep = " "),
+             main = paste("complete trace (no burnin)"))
+        abline(h = true_vals[i], col = "green")
+        abline(h = posterior_means[i], col = "red")
+      }
+    }
+
+  }
+  #
+  #
+  #
+  #
+  #
+  summary_results <- data.frame(true_value = numeric(num_par),
+                                start_value = numeric(num_par),
+                                mean = numeric(num_par),
+                                sd = numeric(num_par),
+                                KI_lower = numeric(num_par),
+                                KI_upper = numeric(num_par),
+                                containd = logical(num_par)
+  )
+  row.names(summary_results) <- par_names
+  for (i in 1:num_par) {
+    summary_results[i, 1] <- true_vals[i]
+    summary_results[i, 2] <- start_vals[i]
+    summary_results[i, 3] <- posterior_means[i]
+    summary_results[i, 4] <- sd(mcmc_sims[i, burn:num_mcmc])
+    KI <- quantile(mcmc_sims[i, burn:num_mcmc],
+                   probs = c(0.05, 0.95),
+                   names = FALSE)
+    summary_results[i, 5] <- KI[1]
+    summary_results[i, 6] <- KI[2]
+    summary_results[i, 7] <- (KI[1] <= true_vals[i] & true_vals[i] <= KI[2])
+  }
+  if (table_view) {
+    View(summary_results)
+    }
+  if (table_save) {
+    if (is.null(table_path)) {
+      error("No 'table_path' to save correct test solution is specified!")
+    } else {
+      write_csv(summary_results, path = table_path)
+    }
+  }
+  #
+  #
+  #
+  #
+  #
+  if (update_rates) {
+    par(mfrow = c(1, 1))
+    analyse_states_ur(trajectories = res$xtraj)
+  }
+}
+analyse_states_ur <- function(trajectories) {
+  num_trajs  <- length(trajectories)
+  num_draws  <- dim(trajectories[[1]])[1]
+  num_states <- dim(trajectories[[1]])[2]
+  urs <- matrix(0, ncol = num_trajs, nrow = num_states)
+  for (i in 1:num_trajs) {
+    num_unique_states <- apply(trajectories[[i]], MARGIN = 2, unique)
+    num_unique_states <- unlist(lapply(num_unique_states, length))
+    urs[, i] <- num_unique_states/num_draws
+  }
+  matplot(urs , type = "l")
+}
+verify_test <- function(make_correct_test = FALSE,
+                        path_test_new,
+                        path_test_sol) {
+  # this function compares two tests, one defined as the correct solution passed
+  # via path_test_sol and the other as the current test to compare with passed
+  # via path_test_new
+  if (make_correct_test) {
+    # analyse_mcmc_convergence with table_view = table_save = TRUE and a
+    # table_path set to save an output table of a test as a new
+    # correct test solution
+    analyse_mcmc_convergence(mcmc_sims  = par_mcmc,
+                             true_vals  = unlist(par_true[1:2]),
+                             start_vals = unlist(par_init[1:2]),
+                             par_names  = par_names,
+                             states = res$xtraj,
+                             burn = burnin,
+                             table_view = TRUE,
+                             table_save = TRUE,
+                             table_path = path_test_sol)
+  }
+  correct_sol <- read_csv(file = path_test_sol)
+  test_sol    <- read_csv(file = path_test_new)
+  out <- identical(correct_sol, test_sol)
+  if (out) {
+    return(cat("Are current test and correct solution identical?\nResult: ",
+               green(out),"\n")
+    )
+  } else {
+    return(cat("Are current test and correct solution identical?\nResult: ",
+               red(out),"\n")
+    )
+  }
+
+}
