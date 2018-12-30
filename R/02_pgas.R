@@ -35,8 +35,9 @@ pgas <- function(M, N, K, TT,
   #  Initialize state values (1st conditioning trajectory)
   Xa[1, ] <- traj_init[1]
   Xb[1, ] <- traj_init[2]
-  # monitor_states(states_drawn = cbind(Xa[1, ], Xb[1, ]),
-  #                states_true = cbind(xa_t, xb_t))
+  monitor_states(states_drawn = cbind(Xa[1, ], Xb[1, ]),
+                 states_true  = cbind(xa_t, xb_t),
+                 current = 1, total = 1, len = 1)
   #  Initialize priors
   prior_a      <- par_prior[1]
   prior_b      <- par_prior[2]
@@ -58,6 +59,9 @@ pgas <- function(M, N, K, TT,
   b       <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
   Xa[1, ] <- cpfOut[[2]][b, ]
   Xb[1, ] <- cpfOut[[3]][b, ]
+  monitor_states(states_drawn = cbind(Xa[1, ], Xb[1, ]),
+                 states_true  = cbind(xa_t, xb_t),
+                 current = 1, total = 1, len = 1)
   # Run MCMC loop
   for (m in 2:M) {
     how_long(m, M, len = M)
@@ -121,6 +125,9 @@ pgas <- function(M, N, K, TT,
     b <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
     Xa[m, ] <- cpfOut[[2]][b, ]
     Xb[m, ] <- cpfOut[[3]][b, ]
+    monitor_states(states_drawn = cbind(Xa[m, ], Xb[m, ]),
+                   states_true = cbind(xa_t, xb_t),
+                   current = m, total = M, len = 100)
   }
   return(list(sigma_sq_xa = sig_sq_xa,
               phi_xa = phi_xa,

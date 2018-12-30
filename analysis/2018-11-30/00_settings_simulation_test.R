@@ -1,8 +1,9 @@
 # 0. Set up MCMC settings -------------------------------------------------
-num_particles <- 5   # Number of particles used in the conditional BPF
-TT <- 10             # Length of data record
-num_mcmc <- 10       # Number of iterations in the MCMC samplers
-burnin   <- 0        # Number of interations to burn
+num_particles <- 5             # Number of particles used in the conditional BPF
+TT <- 10                       # Length of data record
+num_mcmc <- 10                 # Number of iterations in the MCMC samplers
+burnin   <- 0                  # Number of interations to burn
+deviate_states_init <- c(log(1.5), 150)
 # 1. Set up parameter values ----------------------------------------------
 # I. xa_t process parameters:
 true_sig_sq_xa <- 0.1      # True latent state process noise variance
@@ -35,9 +36,9 @@ dataSim <- generate_data(par_true = par_true,
                          K = KK,
                          num_incs = num_obs,
                          x_levels = par_levels,
-                         x_sd = par_sd,
                          seq_exps = c(T, F, T, F),
-                         seq_cept = c(F, F, F, F))
+                         seq_cept = c(F, F, F, F),
+                         old_regs = FALSE)
 y_raw <- dataSim[[1]]
 yz_t  <- dataSim[[2]]
 y_t   <- matrix(0, nrow = TT, ncol = KK)
