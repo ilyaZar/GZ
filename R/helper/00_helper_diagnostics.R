@@ -186,3 +186,28 @@ verify_test <- function(make_correct_test = FALSE,
   }
 
 }
+monitor_states <- function(states_drawn, states_true, freeze = 0.5,
+                           current, total, len) {
+  # if (num_trajs != dim(states_drawn)[2]) {
+  #   error("Different number of trajectories to compare!")
+  # }
+  print_iter <- total/len
+  if ((current %% print_iter) != 0) {
+    return()
+
+  } else {
+    num_trajs <- dim(states_true)[2]
+
+    names_title <- paste(c("True (black) and filtered (red) states for"),
+                         c("xa_t", "xb_t"))
+    names_ylab  <- paste(c("xa_t", "xb_t"), "states")
+    par(mfrow = c(num_trajs, 1))
+    for (i in 1:num_trajs) {
+      matplot(cbind(states_true[, i], states_drawn[, i]),
+              type = "l",
+              main = names_title[i],
+              ylab = names_ylab[i])
+      Sys.sleep(freeze)
+    }
+  }
+}
