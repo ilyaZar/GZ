@@ -25,7 +25,7 @@ if (test) {
 } else {
   source("./analysis/2018-11-30/00_settings_simulation_init.R")
 }
-res <- pgas(N = num_particles, MM = num_mcmc, K = KK, TT = TT,
+res <- pgas(N = num_particles, MM = num_mcmc, KK = KK, TT = TT,
             y = y_t, yz = yz_t, Za = za_t, Zb = zb_t, Zp = zp_t, Zq = zq_t,
             par_prior = c(prior_a, prior_b),
             par_inits = par_init,
