@@ -4,25 +4,24 @@ helper_as <- function(M, x) {
         function(x) {drop(crossprod(crossprod(M, x), x))})
 }
 cBPF_as <- function(y, yz, Za, Zb, Zp, Zq,
-                    K, N, TT,
+                    KK, N, TT,
                     sig_sq_xa, phi_xa, bet_xa, xa_r,
                     sig_sq_xb, phi_xb, bet_xb, xb_r,
                     filtering = TRUE) {
-  T <- TT
   if (!filtering) {
-    xa <- matrix(rep(log(xa_t), times = N), nrow = N, ncol = T, byrow = TRUE)
-    xb <- matrix(rep(xb_t, times = N), nrow = N, ncol = T, byrow = TRUE)
-    w  <- matrix(1/N, nrow = N, ncol = T)
+    xa <- matrix(rep(log(xa_t), times = N), nrow = N, ncol = TT, byrow = TRUE)
+    xb <- matrix(rep(xb_t, times = N), nrow = N, ncol = TT, byrow = TRUE)
+    w  <- matrix(1/N, nrow = N, ncol = TT)
     return(list(w, xa, xb))
   }
   # DATA CONTAINERS
   # particles for state processes:
-  xa <- matrix(0, nrow = N, ncol = T) # x_a
-  xb <- matrix(0, nrow = N, ncol = T) # x_b
-  xp <- matrix(rep(xp_t, times = N), nrow = N, ncol = T, byrow = T) # x_p
-  xq <- matrix(rep(xq_t, times = N), nrow = N, ncol = T, byrow = T) # x_q
-  a  <- matrix(0, nrow = N, ncol = T)                               # ancestors
-  w  <- matrix(0, nrow = N, ncol = T)                               # weights
+  xa <- matrix(0, nrow = N, ncol = TT) # x_a
+  xb <- matrix(0, nrow = N, ncol = TT) # x_b
+  xp <- matrix(rep(xp_t, times = N), nrow = N, ncol = TT, byrow = TRUE) # x_p
+  xq <- matrix(rep(xq_t, times = N), nrow = N, ncol = TT, byrow = TRUE) # x_q
+  a  <- matrix(0, nrow = N, ncol = TT)                               # ancestors
+  w  <- matrix(0, nrow = N, ncol = TT)                               # weights
 
   # I. INITIALIZATION (t = 0)
   # Sampling initial condition from prior
@@ -44,7 +43,7 @@ cBPF_as <- function(y, yz, Za, Zb, Zp, Zq,
   xb[, 1] <- eval_fb[a[, 1]] + sqrt(sig_sq_xb)*rnorm(N)
   # weighting
   w_log   <- w_xa(xa = xa[, 1], y = y[1, ], yz = yz[1, ],
-                  xb = xb[, 1], xp = xp[, 1], xq = xq[, 1], K = K)
+                  xb = xb[, 1], xp = xp[, 1], xq = xq[, 1], KK = KK)
   w_max   <- max(w_log)
   w_tilde <- exp(w_log - w_max)
   w[, 1]  <- w_tilde/sum(w_tilde)
@@ -53,7 +52,7 @@ cBPF_as <- function(y, yz, Za, Zb, Zp, Zq,
   xb[N, 1] <- xb_r[1]
 
   # II. FOR t = 2,..,T
-  for (t in 2:T) {
+  for (t in 2:TT) {
     # resampling
     a[, t]     <- sample.int(n = N, replace = TRUE, prob = w[, t - 1])
     # propagation
@@ -78,14 +77,14 @@ cBPF_as <- function(y, yz, Za, Zb, Zp, Zq,
     a[N, t]    <- sample.int(n = N, size = 1, replace = TRUE, prob = w_as)
     # weighting
     w_log   <- w_xa(xa = xa[, t], y = y[t, ], yz = yz[t, ],
-                    xb = xb[, t], xp = xp[, t], xq = xq[, t], K = K)
+                    xb = xb[, t], xp = xp[, t], xq = xq[, t], KK = KK)
     w_max   <- max(w_log)
     w_tilde <- exp(w_log - w_max)
     w[, t]  <- w_tilde/sum(w_tilde)
   }
   # trajectories
-  ind <- a[, T]
-  for (t in (T - 1):1) {
+  ind <- a[, TT]
+  for (t in (TT - 1):1) {
     xa[, t] <- xa[ind, t]
     xb[, t] <- xb[ind, t]
     ind     <- a[ind, t]
