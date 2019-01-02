@@ -30,3 +30,30 @@ mu_xa
 #
 # (crossprod(regs_a, regs_a)/sig_sq_xa_new + prior_VCM_xa) %*% Omega_xa
 # (crossprod(regs_a, regs_a)/sig_sq_xa_new + 1) %*% Omega_xa
+
+
+d_test <- d[1:3, 1:3]
+xp_test <- xp[1:3]
+pbeta(q = d_test, shape1 = exp(xp_test), shape2 = xq[1:3])
+xq_t
+
+
+
+
+mu_log_norm <- 150
+sd_log_norm <- 100
+
+core_transform <- 1 + sd_log_norm^2/mu_log_norm^2
+mu_norm <- log(mu_log_norm/(sqrt(core_transform)))
+sd_norm <- sqrt(log(core_transform))
+
+mu_norm
+sd_norm^2
+
+test_norm <- rnorm(n = 1000, mean = mu_norm, sd = sd_norm)
+test_log_norm <- exp(test_norm)
+mean(test_log_norm)
+sd(test_log_norm)
+plot(test_log_norm, type = "l")
+
+

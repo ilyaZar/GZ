@@ -4,7 +4,7 @@ true_sig_sq_xa <- 0.2      # True latent state process noise variance
 true_phi_xa    <- 0.8      # True autoregressive parameter for states
 true_bet_xa    <- c(-2.5, 3) # c(-2.5, 3, -1, 0.5) # c(2) #   True regressor coefficients for states
 # II. xb_t process parameters:
-true_sig_sq_xb <- 5
+true_sig_sq_xb <- 0.2
 true_phi_xb    <- 0.5
 true_bet_xb    <- c(2, -1)
 # III. xp_t process parameters:

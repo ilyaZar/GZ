@@ -1,31 +1,29 @@
-analyse_mcmc_convergence <- function(mcmc_sims, states = NULL,
+analyse_mcmc_convergence <- function(mcmc_sims, burn, states,
                                      true_vals, par_names, start_vals,
-                                     burn,
-                                     plots = FALSE,
-                                     ggplots = FALSE,
-                                     plot_delay = 1,
-                                     update_rates = FALSE,
+                                     plot_view = FALSE,
+                                     plot_ggp2 = FALSE,
+                                     plot_save = FALSE,
+                                     plot_path = NULL,
+                                     plot_name = NULL,
                                      table_view = FALSE,
                                      table_save = FALSE,
-                                     table_path = NULL) {
-  if (update_rates) {
-    if (is.null(states)) error("States required for update rates not provided!")
-  }
+                                     table_path = NULL,
+                                     ur_view = FALSE,
+                                     ur_save = FALSE,
+                                     ur_path = NULL) {
   num_par         <- dim(mcmc_sims)[1]
   num_mcmc        <- dim(mcmc_sims)[2]
   posterior_means <- rowMeans(mcmc_sims[, burn:num_mcmc])
-   if (ggplots) {
-     mcmc_sims_df        <- data.frame(cbind(1:num_mcmc, t(mcmc_sims)))
-     names(mcmc_sims_df) <- c("num_mcmc", par_names)
-  }
   #
   #
   #
   #
   #
-  if (plots) {
-    if (ggplots) {
-        for (i in 1:num_par) {
+  if (plot_view) {
+    if (plot_ggp2) {
+      mcmc_sims_df        <- data.frame(cbind(1:num_mcmc, t(mcmc_sims)))
+      names(mcmc_sims_df) <- c("num_mcmc", par_names)
+      for (i in 1:num_par) {
         par_to_plot <- parse(text = par_names[i])
         hist_plot <- ggplot(data = subset(mcmc_sims_df, num_mcmc >= burn)) +
           geom_density(mapping = aes_string(x = par_names[i])) +
@@ -59,15 +57,44 @@ analyse_mcmc_convergence <- function(mcmc_sims, states = NULL,
           geom_hline(aes(yintercept = 0)) +
           geom_segment(mapping = aes(xend = lag, yend = 0))
 
+        if (plot_save) {
+          current_plot_name <- file.path(plot_path,
+                                         paste(plot_name,"_",
+                                               par_names[i],
+                                               ".eps",
+                                               sep = ""))
+          print(paste("Saved plots in: ", current_plot_name))
+          # setEPS()
+          # postscript(current_plot_name)
+          # pdf(file = current_plot_name, width = 7, height = 7)
+        }
         grid.arrange(hist_plot,
                      trace_plot_full,
                      acf_plot,
                      trace_plot_burn,
                      nrow = 2)
+        if (plot_save) {
+          dev.off()
+        }
       }
     } else{
-      par(mfrow = c(2, 2))
       for (i in 1:num_par) {
+        if (plot_save) {
+          current_plot_name <- file.path(plot_path,
+                                         paste(plot_name, "_",
+                                               par_names[i],
+                                               ".eps",
+                                               sep = ""))
+          print(paste("Saved plots in: ", current_plot_name))
+          postscript(current_plot_name,
+                     horizontal = FALSE,
+                     onefile = FALSE,
+                     paper = "special")
+          # setEPS()
+          # postscript(current_plot_name)
+          # pdf(file = current_plot_name, width = 7, height = 7)
+        }
+        par(mfrow = c(2, 2))
         hist(mcmc_sims[i, burn:num_mcmc],
              xlab = par_names[i],
              main = "posterior density")
@@ -89,9 +116,11 @@ analyse_mcmc_convergence <- function(mcmc_sims, states = NULL,
              main = paste("complete trace (no burnin)"))
         abline(h = true_vals[i], col = "green")
         abline(h = posterior_means[i], col = "red")
+        if (plot_save) {
+          dev.off()
+        }
       }
     }
-
   }
   #
   #
@@ -120,22 +149,21 @@ analyse_mcmc_convergence <- function(mcmc_sims, states = NULL,
   }
   if (table_view) {
     View(summary_results)
-    }
+  }
   if (table_save) {
-    if (is.null(table_path)) {
-      error("No 'table_path' to save correct test solution is specified!")
-    } else {
-      write_csv(summary_results, path = table_path)
-    }
+    write_csv(summary_results, path = table_path)
   }
   #
   #
   #
   #
   #
-  if (update_rates) {
+  if (ur_view) {
     par(mfrow = c(1, 1))
     analyse_states_ur(trajectories = res$xtraj)
+  }
+  if (ur_save) {
+    # SAVE PLOTS
   }
 }
 analyse_states_ur <- function(trajectories) {
@@ -184,21 +212,19 @@ verify_test <- function(make_correct_test = FALSE,
   }
 
 }
-monitor_states <- function(states_drawn, states_true, freeze = 0.5,
-                           current, total, len) {
+monitor_states <- function(states_drawn, states_true, freeze = 1.5,
+                           current, total, num_prints) {
   # if (num_trajs != dim(states_drawn)[2]) {
   #   error("Different number of trajectories to compare!")
   # }
-  print_iter <- total/len
+  print_iter <- total/num_prints
   if ((current %% print_iter) != 0) {
     return()
-
   } else {
     num_trajs <- dim(states_true)[2]
-
     names_title <- paste(c("True (black) and filtered (red) states for"),
-                         c("xa_t", "xb_t"))
-    names_ylab  <- paste(c("xa_t", "xb_t"), "states")
+                         c("xa_t", "xb_t", "xp_t"))
+    names_ylab  <- paste(c("xa_t", "xb_t", "xp_t"), "states")
     par(mfrow = c(num_trajs, 1))
     for (i in 1:num_trajs) {
       matplot(cbind(states_true[, i], states_drawn[, i]),

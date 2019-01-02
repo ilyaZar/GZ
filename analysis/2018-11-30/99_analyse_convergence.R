@@ -1,3 +1,10 @@
+if (pgas_run) {
+  res <- out_pgas
+  subfolder <- "pgas"
+} else {
+  res <- out_gibbs
+  subfolder <- "gibbs"
+}
 par_mcmc  <- rbind(res$sigma_sq_xa, res$phi_xa, res$bet_xa,
                    res$sigma_sq_xb, res$phi_xb, res$bet_xb,
                    res$sigma_sq_xp, res$phi_xp, res$bet_xp)
@@ -29,6 +36,14 @@ if (test) {
                            par_names  = par_names,
                            states = res$xtraj,
                            burn = burnin,
-                           plots = TRUE,
+                           plot_view = TRUE,
+                           plot_save = FALSE,
+                           plot_path = file.path(getwd(),
+                                                 "analysis",
+                                                 "2018-11-30",
+                                                 "doc",
+                                                 "fig",
+                                                 subfolder),
+                           plot_name = "pgas",
                            table_view = TRUE)
 }

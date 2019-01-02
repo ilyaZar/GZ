@@ -46,9 +46,9 @@ pgas <- function(MM, N, KK, TT,
   Xa[1, ] <- traj_init[1]
   Xb[1, ] <- traj_init[2]
   Xp[1, ] <- traj_init[3]
-  # monitor_states(states_drawn = cbind(exp(Xa[1, ]), Xb[1, ]),
-  #                states_true  = cbind(xa_t, xb_t),
-  #                current = 1, total = 1, len = 1)
+  monitor_states(states_drawn = cbind(exp(Xa[1, ]), Xb[1, ], exp(Xp[1, ])),
+                 states_true  = cbind(xa_t, xb_t, xp_t),
+                 current = 1, total = 1, num_prints = 1)
   #  Initialize priors
   prior_a      <- par_prior[1]
   prior_b      <- par_prior[2]
@@ -66,15 +66,19 @@ pgas <- function(MM, N, KK, TT,
                     phi_xb = phi_xb[1],
                     bet_xb = bet_xb[, 1, drop = F],
                     xb_r = Xb[1, ],
+                    sig_sq_xp = sig_sq_xp[1],
+                    phi_xp = phi_xp[1],
+                    bet_xp = bet_xp[, 1, drop = F],
+                    xp_r = Xp[1, ],
                     filtering = filtering)
   w       <- cpfOut[[1]][, TT]
   b       <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
   Xa[1, ] <- cpfOut[[2]][b, ]
   Xb[1, ] <- cpfOut[[3]][b, ]
   Xp[1, ] <- cpfOut[[4]][b, ]
-  # monitor_states(states_drawn = cbind(exp(Xa[1, ]), Xb[1, ]),
-  #                states_true  = cbind(xa_t, xb_t),
-  #                current = 1, total = 1, len = 1)
+  monitor_states(states_drawn = cbind(exp(Xa[1, ]), Xb[1, ], exp(Xp[1, ])),
+                 states_true  = cbind(xa_t, xb_t, xp_t),
+                 current = 1, total = 1, num_prints = 1)
   # Run MCMC loop
   for (m in 2:MM) {
     how_long(m, MM, len = MM)
@@ -138,7 +142,7 @@ pgas <- function(MM, N, KK, TT,
     }
     # Run CPF-AS PART
     cpfOut <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
-                       N = N, TT = TT, KK = KK,
+                      N = N, TT = TT, KK = KK,
                       sig_sq_xa = sig_sq_xa[m],
                       phi_xa = phi_xa[m],
                       bet_xa = bet_xa[, m, drop = F],
@@ -147,6 +151,10 @@ pgas <- function(MM, N, KK, TT,
                       phi_xb = phi_xb[m],
                       bet_xb = bet_xb[, m, drop = F],
                       xb_r = Xb[m - 1,],
+                      sig_sq_xp = sig_sq_xp[m],
+                      phi_xp = phi_xp[m],
+                      bet_xp = bet_xp[, m, drop = F],
+                      xp_r = Xp[m - 1,],
                       filtering = filtering)
     w      <- cpfOut[[1]][, TT]
     # draw b
@@ -154,9 +162,9 @@ pgas <- function(MM, N, KK, TT,
     Xa[m, ] <- cpfOut[[2]][b, ]
     Xb[m, ] <- cpfOut[[3]][b, ]
     Xp[m, ] <- cpfOut[[4]][b, ]
-    # monitor_states(states_drawn = cbind(exp(Xa[m, ]), Xb[m, ]),
-    #                states_true = cbind(xa_t, xb_t),
-    #                current = m, total = MM, len = MM)
+    monitor_states(states_drawn = cbind(exp(Xa[m, ]), Xb[m, ], exp(Xp[m, ])),
+                   states_true = cbind(xa_t, xb_t, xp_t),
+                   current = m, total = MM, num_prints = 10)
   }
   return(list(sigma_sq_xa = sig_sq_xa,
               phi_xa = phi_xa,
