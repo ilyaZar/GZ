@@ -3,7 +3,7 @@ num_particles <- 50 # Number of particles used in the conditional BPF
 num_mcmc <- 1500    # Number of iterations in the MCMC samplers
 burnin   <- 100     # Number of interations to burn
 # Initialize states at particular deviated values from true state values
-deviate_states_init <- c(log(5), 70) # c(log(1.5), 150) #
+deviate_states_init <- c(log(5), 70, log(2.5)) # c(log(1.5), 150) #
 # Initialize pars at percentage deviation from true par values
 deviate_par_init    <- 400 # in %
 # 2. Initialization for the parameters ------------------------------------

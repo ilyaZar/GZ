@@ -11,7 +11,7 @@ source("./R/helper/00_helper_diagnostics.R")
 source("./R/01_cBPF_as.R")
 source("./R/02_pgas.R")
 # PGAS run ----------------------------------------------------------------
-test          <- T
+test          <- F
 simulate_data <- T
 init_at_true  <- F
 if (test) {
@@ -19,7 +19,7 @@ if (test) {
   source("./analysis/2018-11-30/00_settings_simulation_test.R")
   source("./analysis/2018-11-30/00_settings_simulation_test_init.R")
 } else if (simulate_data) {
-  set.seed(139423)
+   set.seed(3)# set.seed(139423)
   source("./analysis/2018-11-30/00_settings_simulation_run.R")
   source("./analysis/2018-11-30/00_settings_simulation_run_init.R")
 } else {
@@ -30,5 +30,5 @@ res <- pgas(N = num_particles, MM = num_mcmc, KK = KK, TT = TT,
             par_prior = c(prior_a, prior_b),
             par_inits = par_init,
             traj_init = deviate_states_init,
-            filtering = TRUE)
+            filtering = FALSE)
 source("./analysis/2018-11-30/99_analyse_convergence.R")

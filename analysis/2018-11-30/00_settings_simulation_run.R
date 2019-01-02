@@ -31,7 +31,7 @@ dataSim <- generate_data(par_true = par_true,
                          K = KK,
                          num_incs = num_obs,
                          x_levels = par_levels,
-                         seq_exps = c(T, F, T, F),
+                         seq_logs = c(T, F, T, F),
                          seq_cept = c(F, F, F, F),
                          old_regs = FALSE)
 y_raw <- dataSim[[1]]

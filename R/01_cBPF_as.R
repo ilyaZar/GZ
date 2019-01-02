@@ -11,17 +11,20 @@ cBPF_as <- function(y, yz, Za, Zb, Zp, Zq,
   if (!filtering) {
     xa <- matrix(rep(log(xa_t), times = N), nrow = N, ncol = TT, byrow = TRUE)
     xb <- matrix(rep(xb_t, times = N), nrow = N, ncol = TT, byrow = TRUE)
+    xp <- matrix(rep(log(xp_t), times = N), nrow = N, ncol = TT, byrow = TRUE)
     w  <- matrix(1/N, nrow = N, ncol = TT)
-    return(list(w, xa, xb))
+    return(list(w, xa, xb, xp))
   }
   # DATA CONTAINERS
   # particles for state processes:
-  xa <- matrix(0, nrow = N, ncol = TT) # x_a
-  xb <- matrix(0, nrow = N, ncol = TT) # x_b
-  xp <- matrix(rep(xp_t, times = N), nrow = N, ncol = TT, byrow = TRUE) # x_p
-  xq <- matrix(rep(xq_t, times = N), nrow = N, ncol = TT, byrow = TRUE) # x_q
-  a  <- matrix(0, nrow = N, ncol = TT)                               # ancestors
-  w  <- matrix(0, nrow = N, ncol = TT)                               # weights
+  xa <- matrix(0, nrow = N, ncol = TT)
+  xb <- matrix(0, nrow = N, ncol = TT)
+  xp <- matrix(rep(xp_t, times = N), nrow = N, ncol = TT, byrow = TRUE)
+  xq <- matrix(rep(xq_t, times = N), nrow = N, ncol = TT, byrow = TRUE)
+  # ancestors
+  a  <- matrix(0, nrow = N, ncol = TT)
+  # weights
+  w  <- matrix(0, nrow = N, ncol = TT)
 
   # I. INITIALIZATION (t = 0)
   # Sampling initial condition from prior
