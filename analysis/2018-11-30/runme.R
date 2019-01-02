@@ -13,7 +13,7 @@ source("./R/02_pgas.R")
 # PGAS run ----------------------------------------------------------------
 test          <- F
 simulate_data <- T
-init_at_true  <- T
+init_at_true  <- F
 if (test) {
   set.seed(123)
   source("./analysis/2018-11-30/00_settings_simulation_test.R")
@@ -29,5 +29,5 @@ res <- pgas(N = num_particles, M = num_mcmc, K = KK, TT = TT,
             par_prior = c(prior_a, prior_b),
             par_inits = par_init,
             traj_init = deviate_states_init,
-            filtering = T)
+            filtering = TRUE)
 source("./analysis/2018-11-30/99_analyse_convergence.R")

@@ -16,7 +16,6 @@ analyse_mcmc_convergence <- function(mcmc_sims, states = NULL,
   posterior_means <- rowMeans(mcmc_sims[, burn:num_mcmc])
    if (ggplots) {
      mcmc_sims_df        <- data.frame(cbind(1:num_mcmc, t(mcmc_sims)))
-     # mcmc_sims_obj       <- coda::mcmc(mcmc_sims_df)
      names(mcmc_sims_df) <- c("num_mcmc", par_names)
   }
   #
@@ -105,8 +104,7 @@ analyse_mcmc_convergence <- function(mcmc_sims, states = NULL,
                                 sd = numeric(num_par),
                                 KI_lower = numeric(num_par),
                                 KI_upper = numeric(num_par),
-                                containd = logical(num_par)
-  )
+                                containd = logical(num_par))
   row.names(summary_results) <- par_names
   for (i in 1:num_par) {
     summary_results[i, 1] <- true_vals[i]

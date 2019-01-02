@@ -158,7 +158,7 @@ generate_x_z <- function(phi_x, sig_sq_x, bet_x,
                          ncol = dim_reg,
                          byrow = TRUE)
     if (intercept) {
-      z[, 1] <- rnorm(T, mean = 1, sd = 0.1) # 1
+      z[, 1] <- 1 # rnorm(T, mean = 1, sd = 0.1)
     }
   }
 # END OF REGRESSOR SIMULATION: --------------------------------------------

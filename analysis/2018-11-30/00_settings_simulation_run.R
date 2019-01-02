@@ -2,7 +2,7 @@
 # I. xa_t process parameters:
 true_sig_sq_xa <- 0.2      # True latent state process noise variance
 true_phi_xa    <- 0.8      # True autoregressive parameter for states
-true_bet_xa    <- c(-2.5, 3, -1, 0.5) # c(-2.5, 3) # c(2) #   True regressor coefficients for states
+true_bet_xa    <- c(-2.5, 3) # c(-2.5, 3, -1, 0.5) # c(2) #   True regressor coefficients for states
 # II. xb_t process parameters:
 true_sig_sq_xb <- 5
 true_phi_xb    <- 0.5
@@ -32,7 +32,7 @@ dataSim <- generate_data(par_true = par_true,
                          num_incs = num_obs,
                          x_levels = par_levels,
                          seq_exps = c(T, F, T, F),
-                         seq_cept = c(T, F, F, F),
+                         seq_cept = c(F, F, F, F),
                          old_regs = FALSE)
 y_raw <- dataSim[[1]]
 yz_t  <- dataSim[[2]]
