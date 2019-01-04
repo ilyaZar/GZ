@@ -59,10 +59,10 @@ pgas <- function(MM, N, KK, TT,
   Xb[1, ] <- traj_init[2]
   Xp[1, ] <- traj_init[3]
   Xq[1, ] <- traj_init[4] ######################################################
-  monitor_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
-                                      exp(Xp[1, ]), exp(Xq[1, ])), #############
-                 states_true  = cbind(xa_t, xb_t, xp_t, xq_t), #################
-                 current = 1, total = 1, num_prints = 1)
+  monitor_pgas_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
+                                           exp(Xp[1, ]), exp(Xq[1, ])), ########
+                      states_true  = cbind(xa_t, xb_t, xp_t, xq_t), ############
+                      current = 1, total = 1, num_prints = 1)
   #  Initialize priors: initializa_priors()
   prior_a      <- par_prior[1]
   prior_b      <- par_prior[2]
@@ -96,13 +96,13 @@ pgas <- function(MM, N, KK, TT,
   Xb[1, ] <- cpfOut[[3]][b, ]
   Xp[1, ] <- cpfOut[[4]][b, ]
   Xq[1, ] <- cpfOut[[5]][b, ] ##################################################
-  monitor_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
-                                      exp(Xp[1, ]), exp(Xq[1, ])), #############
-                 states_true  = cbind(xa_t, xb_t, xp_t, xq_t), #################
-                 current = 1, total = 1, num_prints = 1)
+  monitor_pgas_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
+                                           exp(Xp[1, ]), exp(Xq[1, ])), ########
+                      states_true  = cbind(xa_t, xb_t, xp_t, xq_t), ############
+                      current = 1, total = 1, num_prints = 1)
   # Run MCMC loop
   for (m in 2:MM) {
-    how_long(m, MM, len = MM)
+    monitor_pgas_mcmc(m, MM, len = MM)
     # Run GIBBS PART
     # 1. pars for xa_t process --------------------------------------------
     err_sig_sq_x <- Xa[m - 1, 2:TT] - f(x_tt = Xa[m - 1, 1:(TT - 1)],
@@ -207,10 +207,10 @@ pgas <- function(MM, N, KK, TT,
     Xb[m, ] <- cpfOut[[3]][b, ]
     Xp[m, ] <- cpfOut[[4]][b, ]
     Xq[m, ] <- cpfOut[[5]][b, ] ################################################
-    monitor_states(states_drawn = cbind(exp(Xa[m, ]), exp(Xb[m, ]),
-                                        exp(Xp[m, ]), exp(Xq[m, ])), ###########
-                   states_true  = cbind(xa_t, xb_t, xp_t, xq_t), ###############
-                   current = m, total = MM, num_prints = num_plots_states)
+    monitor_pgas_states(states_drawn = cbind(exp(Xa[m, ]), exp(Xb[m, ]),
+                                             exp(Xp[m, ]), exp(Xq[m, ])), ######
+                        states_true  = cbind(xa_t, xb_t, xp_t, xq_t), ##########
+                        current = m, total = MM, num_prints = num_plots_states)
   }
   return(list(sigma_sq_xa = sig_sq_xa,
               phi_xa = phi_xa,

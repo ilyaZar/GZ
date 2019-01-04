@@ -1,13 +1,14 @@
 ################################################################################
 ############################## PGAS for GZ model ###############################
 ################################################################################
-# rm(list = ls())
+rm(list = ls())
 source("./R/helper/00_helper_lib_load.R")
-source("./R/helper/00_helper_general.R")
 source("./R/helper/00_helper_model_fcts.R")
 source("./R/helper/00_helper_simulation_data.R")
-source("./R/helper/00_helper_diagnostics.R")
+source("./R/helper/99_helper_diagnostics.R")
 
+source("./R/helper/01_helper_cBPF_as.R")
+source("./R/helper/02_helper_pgas.R")
 source("./R/01_cBPF_as.R")
 source("./R/02_pgas.R")
 # PGAS run ----------------------------------------------------------------
