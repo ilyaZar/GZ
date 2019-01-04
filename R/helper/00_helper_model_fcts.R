@@ -12,11 +12,11 @@ f <- function(x_tt, z, phi_x, bet_x) {
 w_xa <- function(y, yz, KK, xa, xb, xp, xq) {
   N   <- length(xa)
   zks <- matrix(rep(yz, times = N), nrow = N, byrow = TRUE)
-  d <- zks/xb
+  d <- zks/exp(xb)
   d <- d^exp(xa)
   d <- d/(1 + d)
 
-  F_gb2 <- pbeta(q = d, shape1 = exp(xp), shape2 = xq)
+  F_gb2 <- pbeta(q = d, shape1 = exp(xp), shape2 = exp(xq))
   F_gb2 <- cbind(F_gb2, rep(1, times = N))
 
   pi_prob <- F_gb2[, 2:(KK + 1)] - F_gb2[, 1:KK]

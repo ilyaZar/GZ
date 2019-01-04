@@ -8,9 +8,11 @@ analyse_mcmc_convergence <- function(mcmc_sims, burn, states,
                                      table_view = FALSE,
                                      table_save = FALSE,
                                      table_path = NULL,
+                                     table_name = NULL,
                                      ur_view = FALSE,
                                      ur_save = FALSE,
-                                     ur_path = NULL) {
+                                     ur_path = NULL,
+                                     ur_name = NULL) {
   num_par         <- dim(mcmc_sims)[1]
   num_mcmc        <- dim(mcmc_sims)[2]
   posterior_means <- rowMeans(mcmc_sims[, burn:num_mcmc])
@@ -86,12 +88,12 @@ analyse_mcmc_convergence <- function(mcmc_sims, burn, states,
                                                ".eps",
                                                sep = ""))
           print(paste("Saved plots in: ", current_plot_name))
-          postscript(current_plot_name,
-                     horizontal = FALSE,
-                     onefile = FALSE,
-                     paper = "special")
-          # setEPS()
-          # postscript(current_plot_name)
+          # postscript(current_plot_name,
+          #            horizontal = FALSE,
+          #            onefile = FALSE,
+          #            paper = "special")
+          setEPS()
+          postscript(current_plot_name)
           # pdf(file = current_plot_name, width = 7, height = 7)
         }
         par(mfrow = c(2, 2))
@@ -126,14 +128,14 @@ analyse_mcmc_convergence <- function(mcmc_sims, burn, states,
   #
   #
   #
-  #
+  # #
   summary_results <- data.frame(true_value = numeric(num_par),
-                                start_value = numeric(num_par),
-                                mean = numeric(num_par),
-                                sd = numeric(num_par),
-                                KI_lower = numeric(num_par),
-                                KI_upper = numeric(num_par),
-                                containd = logical(num_par))
+                    start_value = numeric(num_par),
+                    mean = numeric(num_par),
+                    sd = numeric(num_par),
+                    KI_lower = numeric(num_par),
+                    KI_upper = numeric(num_par),
+                    containd = logical(num_par))
   row.names(summary_results) <- par_names
   for (i in 1:num_par) {
     summary_results[i, 1] <- true_vals[i]
@@ -148,10 +150,12 @@ analyse_mcmc_convergence <- function(mcmc_sims, burn, states,
     summary_results[i, 7] <- (KI[1] <= true_vals[i] & true_vals[i] <= KI[2])
   }
   if (table_view) {
-    View(summary_results)
+    View(summary_results, title = paste(table_name, "_summary_results"))
   }
   if (table_save) {
-    write_csv(summary_results, path = table_path)
+    write_csv(summary_results, path = file.path(table_path,
+                                                table_name,
+                                                "_summary_results"))
   }
   #
   #
@@ -176,6 +180,7 @@ analyse_states_ur <- function(trajectories) {
     num_unique_states <- unlist(lapply(num_unique_states, length))
     urs[, i] <- num_unique_states/num_draws
   }
+  # .colMeans(m = num_states, n = num_trajs)
   matplot(urs , type = "l")
 }
 verify_test <- function(make_correct_test = FALSE,
@@ -223,8 +228,8 @@ monitor_states <- function(states_drawn, states_true, freeze = 1.5,
   } else {
     num_trajs <- dim(states_true)[2]
     names_title <- paste(c("True (black) and filtered (red) states for"),
-                         c("xa_t", "xb_t", "xp_t"))
-    names_ylab  <- paste(c("xa_t", "xb_t", "xp_t"), "states")
+                         c("xa_t", "xb_t", "xp_t", "xq_t"))
+    names_ylab  <- paste(c("xa_t", "xb_t", "xp_t", "xq_t"), "states")
     par(mfrow = c(num_trajs, 1))
     for (i in 1:num_trajs) {
       matplot(cbind(states_true[, i], states_drawn[, i]),

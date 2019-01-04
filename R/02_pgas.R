@@ -3,15 +3,18 @@ pgas <- function(MM, N, KK, TT,
                  par_prior,
                  par_inits,
                  traj_init,
-                 filtering = TRUE) {
-  # Initialize data containers
+                 filtering = TRUE,
+                 num_plots_states) {
+  # Initialize data containers: TO BE REPLACED WITH A FUNCTION initializa_cont()
   w  <- numeric(N)
   Xa <- matrix(0, nrow = MM, ncol = TT)
   Xb <- matrix(0, nrow = MM, ncol = TT)
   Xp <- matrix(0, nrow = MM, ncol = TT)
+  Xq <- matrix(0, nrow = MM, ncol = TT) ########################################
   dim_ba <- length(par_inits[[1]][[3]])
   dim_bb <- length(par_inits[[2]][[3]])
   dim_bp <- length(par_inits[[3]][[3]])
+  dim_bq <- length(par_inits[[4]][[3]]) ########################################
 
   sig_sq_xa <- numeric(MM)
   phi_xa    <- numeric(MM)
@@ -22,6 +25,9 @@ pgas <- function(MM, N, KK, TT,
   sig_sq_xp <- numeric(MM)
   phi_xp    <- numeric(MM)
   bet_xp    <- matrix(0, nrow = dim_bp, ncol = MM)
+  sig_sq_xq <- numeric(MM) #####################################################
+  phi_xq    <- numeric(MM) #####################################################
+  bet_xq    <- matrix(0, nrow = dim_bq, ncol = MM) #############################
 
   regs_a       <- matrix(0, nrow = TT - 1, ncol = ncol(Za) + 1)
   Za           <- as.matrix(Za)
@@ -32,7 +38,10 @@ pgas <- function(MM, N, KK, TT,
   regs_p       <- matrix(0, nrow = TT - 1, ncol = ncol(Zp) + 1)
   Zp           <- as.matrix(Zp)
   regs_p[, -1] <- Zp[2:TT, ]
-  #  Initialize parameters
+  regs_q       <- matrix(0, nrow = TT - 1, ncol = ncol(Zq) + 1) ################
+  Zq           <- as.matrix(Zq) ################################################
+  regs_q[, -1] <- Zq[2:TT, ] ###################################################
+  #  Initialize parameters TO BE REPLACED WITH A FUNCTION initializa_pars()
   sig_sq_xa[1] <- par_inits[[1]][[1]]
   phi_xa[1]    <- par_inits[[1]][[2]]
   bet_xa[, 1]  <- par_inits[[1]][[3]]
@@ -42,19 +51,25 @@ pgas <- function(MM, N, KK, TT,
   sig_sq_xp[1] <- par_inits[[3]][[1]]
   phi_xp[1]    <- par_inits[[3]][[2]]
   bet_xp[, 1]  <- par_inits[[3]][[3]]
-  #  Initialize state values (1st conditioning trajectory)
+  sig_sq_xq[1] <- par_inits[[4]][[1]] ##########################################
+  phi_xq[1]    <- par_inits[[4]][[2]] ##########################################
+  bet_xq[, 1]  <- par_inits[[4]][[3]] ##########################################
+  #  Initialize state values (1st conditioning trajectory): initializa_states()
   Xa[1, ] <- traj_init[1]
   Xb[1, ] <- traj_init[2]
   Xp[1, ] <- traj_init[3]
-  monitor_states(states_drawn = cbind(exp(Xa[1, ]), Xb[1, ], exp(Xp[1, ])),
-                 states_true  = cbind(xa_t, xb_t, xp_t),
+  Xq[1, ] <- traj_init[4] ######################################################
+  monitor_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
+                                      exp(Xp[1, ]), exp(Xq[1, ])), #############
+                 states_true  = cbind(xa_t, xb_t, xp_t, xq_t), #################
                  current = 1, total = 1, num_prints = 1)
-  #  Initialize priors
+  #  Initialize priors: initializa_priors()
   prior_a      <- par_prior[1]
   prior_b      <- par_prior[2]
   prior_VCM_xa <- diag(dim_ba + 1)/1000
   prior_VCM_xb <- diag(dim_bb + 1)/1000
   prior_VCM_xp <- diag(dim_bp + 1)/1000
+  prior_VCM_xq <- diag(dim_bq + 1)/1000 ########################################
   # Initialize states by running a PF
   cpfOut <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
                     N = N, TT = TT, KK = KK,
@@ -70,14 +85,20 @@ pgas <- function(MM, N, KK, TT,
                     phi_xp = phi_xp[1],
                     bet_xp = bet_xp[, 1, drop = F],
                     xp_r = Xp[1, ],
+                    sig_sq_xq = sig_sq_xq[1], ##################################
+                    phi_xq = phi_xq[1], ########################################
+                    bet_xq = bet_xq[, 1, drop = F], ############################
+                    xq_r = Xq[1, ], ############################################
                     filtering = filtering)
   w       <- cpfOut[[1]][, TT]
   b       <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
   Xa[1, ] <- cpfOut[[2]][b, ]
   Xb[1, ] <- cpfOut[[3]][b, ]
   Xp[1, ] <- cpfOut[[4]][b, ]
-  monitor_states(states_drawn = cbind(exp(Xa[1, ]), Xb[1, ], exp(Xp[1, ])),
-                 states_true  = cbind(xa_t, xb_t, xp_t),
+  Xq[1, ] <- cpfOut[[5]][b, ] ##################################################
+  monitor_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
+                                      exp(Xp[1, ]), exp(Xq[1, ])), #############
+                 states_true  = cbind(xa_t, xb_t, xp_t, xq_t), #################
                  current = 1, total = 1, num_prints = 1)
   # Run MCMC loop
   for (m in 2:MM) {
@@ -140,6 +161,25 @@ pgas <- function(MM, N, KK, TT,
       phi_xp[m]    <- beta_xp[1]
       bet_xp[, m]  <- beta_xp[-1]
     }
+    # 4. pars for xq_t process --------------------------------------------
+    err_sig_sq_x <- Xq[m - 1, 2:TT] - f(x_tt = Xq[m - 1, 1:(TT - 1)],
+                                        z = Zq[2:TT, , drop = F],
+                                        phi_x = phi_xq[m - 1],
+                                        bet_x = bet_xq[, m - 1])
+    sig_sq_xq[m]  <- 1/rgamma(n = 1, prior_a + (TT - 1)/2,
+                              prior_b + crossprod(err_sig_sq_x)/2)
+    regs_q[, 1]  <- Xq[m - 1, 1:(TT - 1)]
+    x_lhs        <- Xq[m - 1, 2:TT]
+    Omega_xq     <- solve(crossprod(regs_q, regs_q)/sig_sq_xq[m] + prior_VCM_xq)
+    mu_xq        <- Omega_xq %*% (crossprod(regs_q, x_lhs)/sig_sq_xq[m])
+    beta_xq      <- rmvnorm(n = 1, mean = mu_xq, sigma = Omega_xq)
+    phi_xq[m]    <- beta_xq[1]
+    bet_xq[, m]  <- beta_xq[-1]
+    while (near(abs(phi_xq[m]), 1, tol = 0.01) | abs(phi_xq[m]) > 1) {
+      beta_xq      <- rmvnorm(n = 1, mean = mu_xq, sigma = Omega_xq)
+      phi_xq[m]    <- beta_xq[1]
+      bet_xq[, m]  <- beta_xq[-1]
+    }
     # Run CPF-AS PART
     cpfOut <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
                       N = N, TT = TT, KK = KK,
@@ -155,6 +195,10 @@ pgas <- function(MM, N, KK, TT,
                       phi_xp = phi_xp[m],
                       bet_xp = bet_xp[, m, drop = F],
                       xp_r = Xp[m - 1,],
+                      sig_sq_xq = sig_sq_xq[m], ################################
+                      phi_xq = phi_xq[m], ######################################
+                      bet_xq = bet_xq[, m, drop = F], ##########################
+                      xq_r = Xq[m - 1, ], ######################################
                       filtering = filtering)
     w      <- cpfOut[[1]][, TT]
     # draw b
@@ -162,9 +206,11 @@ pgas <- function(MM, N, KK, TT,
     Xa[m, ] <- cpfOut[[2]][b, ]
     Xb[m, ] <- cpfOut[[3]][b, ]
     Xp[m, ] <- cpfOut[[4]][b, ]
-    monitor_states(states_drawn = cbind(exp(Xa[m, ]), Xb[m, ], exp(Xp[m, ])),
-                   states_true = cbind(xa_t, xb_t, xp_t),
-                   current = m, total = MM, num_prints = 10)
+    Xq[m, ] <- cpfOut[[5]][b, ] ################################################
+    monitor_states(states_drawn = cbind(exp(Xa[m, ]), exp(Xb[m, ]),
+                                        exp(Xp[m, ]), exp(Xq[m, ])), ###########
+                   states_true  = cbind(xa_t, xb_t, xp_t, xq_t), ###############
+                   current = m, total = MM, num_prints = num_plots_states)
   }
   return(list(sigma_sq_xa = sig_sq_xa,
               phi_xa = phi_xa,
@@ -175,5 +221,8 @@ pgas <- function(MM, N, KK, TT,
               sigma_sq_xp = sig_sq_xp,
               phi_xp = phi_xp,
               bet_xp = bet_xp,
-              xtraj  = list(Xa, Xb, Xp)))
+              sigma_sq_xq = sig_sq_xq, #########################################
+              phi_xq = phi_xq, #################################################
+              bet_xq = bet_xq, #################################################
+              xtraj  = list(Xa, Xb, Xp, Xq))) ##################################
 }

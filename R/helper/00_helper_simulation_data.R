@@ -167,7 +167,7 @@ generate_x_z <- function(phi_x, sig_sq_x, bet_x,
   } else {
     xinit <- 0
   }
-  set.seed(123)
+  # set.seed(123)
   x[1] <- f(x_tt = xinit, z = z[1, ], phi_x = phi_x, bet_x = bet_x)
   x[1] <- x[1] + sqrt(sig_sq_x)*rnorm(n = 1)
 
