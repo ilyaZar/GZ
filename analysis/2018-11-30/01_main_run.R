@@ -1,6 +1,4 @@
-################################################################################
 ############################## PGAS for GZ model ###############################
-################################################################################
 rm(list = ls())
 source("./R/helper/00_helper_lib_load.R")
 source("./R/helper/00_helper_model_fcts.R")
@@ -12,16 +10,10 @@ source("./R/helper/02_helper_pgas.R")
 source("./R/01_cBPF_as.R")
 source("./R/02_pgas.R")
 # PGAS run ----------------------------------------------------------------
-test          <- F
 simulate_data <- T
-init_at_true  <- F
-pgas_run      <- F
-if (test) {
-  set.seed(123)
-  source("./analysis/2018-11-30/00_settings_simulation_test.R")
-  source("./analysis/2018-11-30/00_settings_simulation_test_init.R")
-  pgas_run <- TRUE
-} else if (simulate_data) {
+init_at_true  <- T
+pgas_run      <- T
+if (simulate_data) {
   set.seed(139423) # set.seed(3) #
   source("./analysis/2018-11-30/00_settings_simulation_run.R")
   source("./analysis/2018-11-30/00_settings_simulation_run_init.R")

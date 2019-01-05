@@ -66,7 +66,7 @@ analyse_mcmc_convergence <- function(mcmc_sims, states,
         ggsave(filename = paste(plot_name, "_", par_names[i], sep = ""),
                plot = current_plot,
                path = plot_path,
-               device = "eps",
+               device = "eps"
                # width = 12,
                # height = 7,
                # units = "cm"
@@ -272,6 +272,4 @@ generate_ggplot <- function(mcmc_sims_df,
                                  nrow = 2)
     return(plot_returned)
   }
-
-
 }
