@@ -118,7 +118,9 @@ analyse_mcmc_convergence <- function(mcmc_sims, states,
     summary_results[i, 7] <- (KI[1] <= true_vals[i] & true_vals[i] <= KI[2])
   }
   if (table_view) {
-    View(summary_results, title = paste(table_name, "_summary_results"))
+    View(summary_results, title = paste(table_name,
+                                        "_summary_results",
+                                        sep = ""))
   }
   if (table_save) {
     write_csv(summary_results, path = file.path(table_path, table_name))
@@ -209,7 +211,7 @@ generate_plot <- function(mcmc_sims,
   plot(mcmc_sims[plot_num, ], type = "l",
        xlab = "mcmc iteration",
        ylab = paste(par_names[plot_num], "value", sep = " "),
-       main = paste("complete trace (no burnin)"))
+       main = "complete trace (no burnin)")
   abline(h = true_vals[plot_num], col = "green")
   abline(h = posterior_means[plot_num], col = "red")
 }
