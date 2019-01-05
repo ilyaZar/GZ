@@ -3,7 +3,8 @@ generate_data <- function(T, K, num_incs,
                           x_levels,
                           seq_logs,
                           seq_cept,
-                          old_regs = FALSE) {
+                          old_regs = FALSE,
+                          plot_states) {
   xa <- rep(0, T)
   xb <- rep(0, T)
   xp <- rep(0, T)
@@ -77,6 +78,20 @@ generate_data <- function(T, K, num_incs,
                       shape2 = xp,
                       shape3 = xq),
                  nrow = T, ncol = num_incs)
+  if (plot_states) {
+    names_title <- paste("True states for ",
+                         "xa_t (black),", " xb_t (red),",
+                         " xp_t (green),", " and", " xq_t (blue)")
+    names_ylab  <- paste(" xa_t,", " xb_t,", " xp_t,",
+                         " and", " xq_t", " states")
+
+    par(mfrow = c(1,1))
+    matplot(cbind(xa_t, xb_t, xp_t, xq_t),
+            type = "l",
+            main = names_title,
+            ylab = names_ylab
+            )
+  }
   return(list(yraw, yz, list(xa, xb, xp, xq), list(za, zb, zp, zq)))
 }
 parameter_fct_log_norm <- function(exp_mu, exp_sd) {

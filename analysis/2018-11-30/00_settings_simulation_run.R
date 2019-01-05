@@ -33,7 +33,8 @@ dataSim <- generate_data(par_true = par_true,
                          x_levels = par_levels,
                          seq_logs = c(T, T, T, T),
                          seq_cept = c(F, F, F, F),
-                         old_regs = FALSE)
+                         old_regs = FALSE,
+                         plot_states = TRUE)
 y_raw <- dataSim[[1]]
 yz_t  <- dataSim[[2]]
 y_t   <- matrix(0, nrow = TT, ncol = KK)
@@ -46,8 +47,6 @@ xa_t <- dataSim[[3]][[1]]
 xb_t <- dataSim[[3]][[2]]
 xp_t <- dataSim[[3]][[3]]
 xq_t <- dataSim[[3]][[4]]
-par(mfrow = c(1,1))
-matplot(cbind(xa_t,  xb_t, xp_t, xq_t), type = "l")
 # xa_t2 <- dataSim[[3]][[1]]
 # xb_t2 <- dataSim[[3]][[2]]
 # xp_t2 <- dataSim[[3]][[3]]

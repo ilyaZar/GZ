@@ -15,7 +15,7 @@ source("./R/02_pgas.R")
 test          <- F
 simulate_data <- T
 init_at_true  <- F
-pgas_run      <- T
+pgas_run      <- F
 if (test) {
   set.seed(123)
   source("./analysis/2018-11-30/00_settings_simulation_test.R")
@@ -47,4 +47,4 @@ if (pgas_run) {
                     filtering = pgas_run,
                     num_plots_states = 1)
 }
-source("./analysis/2018-11-30/99_analyse_convergence.R")
+source("./analysis/2018-11-30/99_analyse_convergence_run.R")
