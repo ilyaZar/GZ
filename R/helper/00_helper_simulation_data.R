@@ -86,7 +86,7 @@ generate_data <- function(T, K, num_incs,
                          " and", " xq_t", " states")
 
     par(mfrow = c(1,1))
-    matplot(cbind(xa_t, xb_t, xp_t, xq_t),
+    matplot(cbind(xa, xb, xp, xq),
             type = "l",
             main = names_title,
             ylab = names_ylab

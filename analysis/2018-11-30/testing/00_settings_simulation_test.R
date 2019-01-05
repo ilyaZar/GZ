@@ -33,7 +33,8 @@ dataSim <- generate_data(par_true = par_true,
                          x_levels = par_levels,
                          seq_logs = c(T, F, T, F),
                          seq_cept = c(F, F, F, F),
-                         old_regs = FALSE)
+                         old_regs = FALSE,
+                         plot_states = FALSE)
 y_raw <- dataSim[[1]]
 yz_t  <- dataSim[[2]]
 y_t   <- matrix(0, nrow = TT, ncol = KK)
