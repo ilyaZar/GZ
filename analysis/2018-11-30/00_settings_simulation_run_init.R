@@ -1,10 +1,10 @@
 # 1. Set up MCMC settings -------------------------------------------------
-num_particles <- 50 # Number of particles used in the conditional BPF
-num_mcmc <- 1380    # Number of iterations in the MCMC samplers
-burnin   <- 100     # Number of interations to burn
+num_particles <- 10000 # Number of particles used in the conditional BPF
+num_mcmc <- 1380       # Number of iterations in the MCMC samplers
+burnin   <- 100        # Number of interations to burn
 # Initialize states at particular deviated values from true state values
 deviate_par_rate    <- 10  # in %
-deviate_states_init <- log(par_levels) + c(1, 2, 1, 2)  # c(log(5), 70) #
+deviate_states_init <- log(par_levels) + c(1, 2, 1, 2)  # c(2, 3, 2, 3)
 # Initialize pars at percentage deviation from true par values
 deviate_par_rate    <- 400
 # 2. Initialization for the parameters ------------------------------------

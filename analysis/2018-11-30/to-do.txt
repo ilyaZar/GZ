@@ -14,3 +14,4 @@ II. add documentation pipeline
 - make proper tables in LaTeX for the Rmarkdown document
 - make a comparison between ideal Gibbs run and PGAS to see difference in estimation quality, in particular test for the remaining pairwise states to be sampled correctly and then try 3 states; experiment with different number of particles and mcmc run-lengths -> put the result into an Rmarkdown doc
 - make a test with a constant for ideal Gibbs and PGAS to see difference in estimation quality and put the result into an Rmarkdown doc (seperate folder from 2018-11-30)
+

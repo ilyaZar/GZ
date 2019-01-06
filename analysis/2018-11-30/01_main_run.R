@@ -11,7 +11,7 @@ source("./R/01_cBPF_as.R")
 source("./R/02_pgas.R")
 # PGAS run ----------------------------------------------------------------
 simulate_data <- T
-init_at_true  <- T
+init_at_true  <- F
 pgas_run      <- T
 if (simulate_data) {
   set.seed(139423) # set.seed(3) #
