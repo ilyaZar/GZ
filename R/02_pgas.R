@@ -77,7 +77,7 @@ pgas <- function(MM, N, KK, TT,
   #                                          exp(Xp[1, ]), exp(Xq[1, ])),
   #                     states_true  = cbind(xa_t, xb_t, xp_t, xq_t),
   #                     current = 1, total = 1, num_prints = 1)
-  cpfOut <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
+  out_cPF <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
                     N = N, TT = TT, KK = KK,
                     sig_sq_xa = sig_sq_xa[1],
                     phi_xa = phi_xa[1],
@@ -96,12 +96,12 @@ pgas <- function(MM, N, KK, TT,
                     bet_xq = bet_xq[, 1, drop = F],
                     xq_r = Xq[1, ],
                     filtering = filtering)
-  w       <- cpfOut[[1]][, TT]
+  w       <- out_cPF[[1]][, TT]
   b       <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
-  Xa[1, ] <- cpfOut[[2]][b, ]
-  Xb[1, ] <- cpfOut[[3]][b, ]
-  Xp[1, ] <- cpfOut[[4]][b, ]
-  Xq[1, ] <- cpfOut[[5]][b, ]
+  Xa[1, ] <- out_cPF[[2]][b, ]
+  Xb[1, ] <- out_cPF[[3]][b, ]
+  Xp[1, ] <- out_cPF[[4]][b, ]
+  Xq[1, ] <- out_cPF[[5]][b, ]
   # monitor_pgas_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
   #                                          exp(Xp[1, ]), exp(Xq[1, ])),
   #                     states_true  = cbind(xa_t, xb_t, xp_t, xq_t),
@@ -186,7 +186,7 @@ pgas <- function(MM, N, KK, TT,
       bet_xq[, m]  <- beta_xq[-1]
     }
     # II. Run cBPF-AS part
-    cpfOut <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
+    out_cPF <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
                       N = N, TT = TT, KK = KK,
                       sig_sq_xa = sig_sq_xa[m],
                       phi_xa = phi_xa[m],
@@ -205,12 +205,12 @@ pgas <- function(MM, N, KK, TT,
                       bet_xq = bet_xq[, m, drop = F],
                       xq_r = Xq[m - 1, ],
                       filtering = filtering)
-    w      <- cpfOut[[1]][, TT]
+    w      <- out_cPF[[1]][, TT]
     b <- sample.int(n = N, size = 1, replace = TRUE, prob = w)
-    Xa[m, ] <- cpfOut[[2]][b, ]
-    Xb[m, ] <- cpfOut[[3]][b, ]
-    Xp[m, ] <- cpfOut[[4]][b, ]
-    Xq[m, ] <- cpfOut[[5]][b, ]
+    Xa[m, ] <- out_cPF[[2]][b, ]
+    Xb[m, ] <- out_cPF[[3]][b, ]
+    Xp[m, ] <- out_cPF[[4]][b, ]
+    Xq[m, ] <- out_cPF[[5]][b, ]
     # monitor_pgas_states(states_drawn = cbind(exp(Xa[m, ]), exp(Xb[m, ]),
     #                                          exp(Xp[m, ]), exp(Xq[m, ])),
     #                     states_true  = cbind(xa_t, xb_t, xp_t, xq_t),

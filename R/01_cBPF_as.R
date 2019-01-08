@@ -61,11 +61,11 @@ cBPF_as <- function(y, yz, Za, Zb, Zp, Zq,
   xp[N, 1] <- xp_r[1]
   xq[N, 1] <- xq_r[1]
   # weighting
-  w_log   <- w_x(y = y[1, ], yz = yz[1, ], KK = KK,
-                 xa = xa[, 1],
-                 xb = xb[, 1],
-                 xp = xp[, 1],
-                 xq = xq[, 1])
+  w_log   <- w_BPF(y = y[1, ], yz = yz[1, ], KK = KK,
+                   xa = xa[, 1],
+                   xb = xb[, 1],
+                   xp = xp[, 1],
+                   xq = xq[, 1])
   w_max   <- max(w_log)
   w_tilde <- exp(w_log - w_max)
   w[, 1]  <- w_tilde/sum(w_tilde)
@@ -99,7 +99,7 @@ cBPF_as <- function(y, yz, Za, Zb, Zp, Zq,
                    eval_fp - xp_r[t],
                    eval_fq - xq_r[t]
                   ),
-                nrow = N, ncol = 4) # 2, 3
+                nrow = N, ncol = 4)
     m2 <- diag(c(sig_sq_xa^{-1},
                  sig_sq_xb^{-1},
                  sig_sq_xp^{-1},
@@ -113,11 +113,11 @@ cBPF_as <- function(y, yz, Za, Zb, Zp, Zq,
     w_as       <- w_tilde_as/sum(w_tilde_as)
     a[N, t]    <- sample.int(n = N, size = 1, replace = TRUE, prob = w_as)
     # weighting
-    w_log   <- w_x(y = y[t, ], yz = yz[t, ], KK = KK,
-                   xa = xa[, t],
-                   xb = xb[, t],
-                   xp = xp[, t],
-                   xq = xq[, t])
+    w_log   <- w_BPF(y = y[t, ], yz = yz[t, ], KK = KK,
+                     xa = xa[, t],
+                     xb = xb[, t],
+                     xp = xp[, t],
+                     xq = xq[, t])
     w_max   <- max(w_log)
     w_tilde <- exp(w_log - w_max)
     w[, t]  <- w_tilde/sum(w_tilde)

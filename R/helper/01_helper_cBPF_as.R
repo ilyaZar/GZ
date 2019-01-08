@@ -3,7 +3,7 @@ helper_as <- function(M, x) {
         MARGIN = 1,
         function(x) {drop(crossprod(crossprod(M, x), x))})
 }
-w_x <- function(y, yz, KK, xa, xb, xp, xq) {
+w_BPF <- function(y, yz, KK, xa, xb, xp, xq) {
   N   <- length(xa)
   zks <- matrix(rep(yz, times = N), nrow = N, byrow = TRUE)
   d <- zks/exp(xb)
