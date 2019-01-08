@@ -1,7 +1,8 @@
 pgas <- function(MM, N, KK, TT,
                  y, yz, Za, Zb, Zp, Zq,
-                 par_prior,
-                 par_inits,
+                 priors,
+                 par_init,
+                 par_true,
                  traj_init,
                  filtering = TRUE,
                  num_plots_states) {
@@ -13,10 +14,11 @@ pgas <- function(MM, N, KK, TT,
   Xp <- matrix(0, nrow = MM, ncol = TT)
   Xq <- matrix(0, nrow = MM, ncol = TT)
 
-  dim_ba <- length(par_inits[[1]][[3]])
-  dim_bb <- length(par_inits[[2]][[3]])
-  dim_bp <- length(par_inits[[3]][[3]])
-  dim_bq <- length(par_inits[[4]][[3]])
+  dim_ba  <- length(par_init[[1]][[3]])
+  dim_bb  <- length(par_init[[2]][[3]])
+  dim_bp  <- length(par_init[[3]][[3]])
+  dim_bq  <- length(par_init[[4]][[3]])
+  dim_all <- dim_ba + dim_bb + dim_bp + dim_bq + 4*2
 
   sig_sq_xa <- numeric(MM)
   phi_xa    <- numeric(MM)
@@ -44,25 +46,26 @@ pgas <- function(MM, N, KK, TT,
   Zq           <- as.matrix(Zq)
   regs_q[, -1] <- Zq[2:TT, ]
   # Initialize priors:
-  prior_a      <- par_prior[1]
-  prior_b      <- par_prior[2]
+  prior_a      <- priors[1]
+  prior_b      <- priors[2]
   prior_VCM_xa <- diag(dim_ba + 1)/1000
   prior_VCM_xb <- diag(dim_bb + 1)/1000
   prior_VCM_xp <- diag(dim_bp + 1)/1000
   prior_VCM_xq <- diag(dim_bq + 1)/1000
   # Initialize parameters
-  sig_sq_xa[1] <- par_inits[[1]][[1]]
-  phi_xa[1]    <- par_inits[[1]][[2]]
-  bet_xa[, 1]  <- par_inits[[1]][[3]]
-  sig_sq_xb[1] <- par_inits[[2]][[1]]
-  phi_xb[1]    <- par_inits[[2]][[2]]
-  bet_xb[, 1]  <- par_inits[[2]][[3]]
-  sig_sq_xp[1] <- par_inits[[3]][[1]]
-  phi_xp[1]    <- par_inits[[3]][[2]]
-  bet_xp[, 1]  <- par_inits[[3]][[3]]
-  sig_sq_xq[1] <- par_inits[[4]][[1]]
-  phi_xq[1]    <- par_inits[[4]][[2]]
-  bet_xq[, 1]  <- par_inits[[4]][[3]]
+  sig_sq_xa[1] <- par_init[[1]][[1]]
+  phi_xa[1]    <- par_init[[1]][[2]]
+  bet_xa[, 1]  <- par_init[[1]][[3]]
+  sig_sq_xb[1] <- par_init[[2]][[1]]
+  phi_xb[1]    <- par_init[[2]][[2]]
+  bet_xb[, 1]  <- par_init[[2]][[3]]
+  sig_sq_xp[1] <- par_init[[3]][[1]]
+  phi_xp[1]    <- par_init[[3]][[2]]
+  bet_xp[, 1]  <- par_init[[3]][[3]]
+  sig_sq_xq[1] <- par_init[[4]][[1]]
+  phi_xq[1]    <- par_init[[4]][[2]]
+  bet_xq[, 1]  <- par_init[[4]][[3]]
+  par_init     <- unlist(par_init)
   # Initialize states
   ## I. Set states to deterministic starting values
   Xa[1, ] <- traj_init[1]
@@ -70,10 +73,10 @@ pgas <- function(MM, N, KK, TT,
   Xp[1, ] <- traj_init[3]
   Xq[1, ] <- traj_init[4]
   ## II. run cBPF and use output as first conditioning trajectory
-  monitor_pgas_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
-                                           exp(Xp[1, ]), exp(Xq[1, ])),
-                      states_true  = cbind(xa_t, xb_t, xp_t, xq_t),
-                      current = 1, total = 1, num_prints = 1)
+  # monitor_pgas_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
+  #                                          exp(Xp[1, ]), exp(Xq[1, ])),
+  #                     states_true  = cbind(xa_t, xb_t, xp_t, xq_t),
+  #                     current = 1, total = 1, num_prints = 1)
   cpfOut <- cBPF_as(y = y, yz = yz, Za = Za, Zb = Zb, Zp = Zp, Zq = Zq,
                     N = N, TT = TT, KK = KK,
                     sig_sq_xa = sig_sq_xa[1],
@@ -99,13 +102,12 @@ pgas <- function(MM, N, KK, TT,
   Xb[1, ] <- cpfOut[[3]][b, ]
   Xp[1, ] <- cpfOut[[4]][b, ]
   Xq[1, ] <- cpfOut[[5]][b, ]
-  monitor_pgas_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
-                                           exp(Xp[1, ]), exp(Xq[1, ])),
-                      states_true  = cbind(xa_t, xb_t, xp_t, xq_t),
-                      current = 1, total = 1, num_prints = 1)
+  # monitor_pgas_states(states_drawn = cbind(exp(Xa[1, ]), exp(Xb[1, ]),
+  #                                          exp(Xp[1, ]), exp(Xq[1, ])),
+  #                     states_true  = cbind(xa_t, xb_t, xp_t, xq_t),
+  #                     current = 1, total = 1, num_prints = 1)
   # Run MCMC loop
   for (m in 2:MM) {
-    monitor_pgas_mcmc(m, MM, len = MM)
     # I. Run GIBBS part
     # 1. pars for xa_t process --------------------------------------------
     err_sig_sq_x <- Xa[m - 1, 2:TT] - f(x_tt = Xa[m - 1, 1:(TT - 1)],
@@ -209,10 +211,23 @@ pgas <- function(MM, N, KK, TT,
     Xb[m, ] <- cpfOut[[3]][b, ]
     Xp[m, ] <- cpfOut[[4]][b, ]
     Xq[m, ] <- cpfOut[[5]][b, ]
-    monitor_pgas_states(states_drawn = cbind(exp(Xa[m, ]), exp(Xb[m, ]),
-                                             exp(Xp[m, ]), exp(Xq[m, ])),
-                        states_true  = cbind(xa_t, xb_t, xp_t, xq_t),
-                        current = m, total = MM, num_prints = num_plots_states)
+    # monitor_pgas_states(states_drawn = cbind(exp(Xa[m, ]), exp(Xb[m, ]),
+    #                                          exp(Xp[m, ]), exp(Xq[m, ])),
+    #                     states_true  = cbind(xa_t, xb_t, xp_t, xq_t),
+    #                     current = m, total = MM, num_prints = num_plots_states)
+    monitor_pgas_time(m, MM, len = MM)
+    monitor_pgas_mcmc(m, MM, len = MM,
+                      val_true = par_true,
+                      val_init = par_init,
+                      current_pars = cbind(sig_sq_xa[1:m], phi_xa[1:m],
+                                           t(bet_xa)[1:m,],
+                                           sig_sq_xb[1:m], phi_xb[1:m],
+                                           t(bet_xb)[1:m,],
+                                           sig_sq_xp[1:m], phi_xp[1:m],
+                                           t(bet_xp)[1:m,],
+                                           sig_sq_xq[1:m], phi_xq[1:m],
+                                           t(bet_xq)[1:m,]),
+                      dim_all = dim_all)
   }
   return(list(sigma_sq_xa = sig_sq_xa,
               phi_xa = phi_xa,

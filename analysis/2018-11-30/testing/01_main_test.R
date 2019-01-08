@@ -18,8 +18,9 @@ source("./analysis/2018-11-30/testing/00_settings_simulation_test_init.R")
 out_pgas <- pgas(N = num_particles, MM = num_mcmc, KK = KK, TT = TT,
                  y = y_t, yz = yz_t,
                  Za = za_t, Zb = zb_t, Zp = zp_t, Zq = zq_t,
-                 par_prior = c(prior_a, prior_b),
-                 par_inits = par_init,
+                 priors = c(prior_a, prior_b),
+                 par_init = par_init,
+                 par_true = true_vals,
                  traj_init = deviate_states_init,
                  filtering = pgas_run,
                  num_plots_states = 1)

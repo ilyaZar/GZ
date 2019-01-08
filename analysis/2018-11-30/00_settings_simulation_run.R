@@ -24,7 +24,7 @@ par_true <- list(list(true_sig_sq_xa, true_phi_xa, true_bet_xa),
 TT <- 100         # Length of data record
 KK       <- 10     # Number of income classes - 1
 num_obs  <- 10e4   # Number of total individual incomes
-par_levels <- c(1.5, 50, 2.5, 3.5)
+par_levels <- c(1.5, 100, 1, 1.5) # c(1.5, 50, 2.5, 3.5)
 # 3. Generate data --------------------------------------------------------
 dataSim <- generate_data(par_true = par_true,
                          T = TT,
