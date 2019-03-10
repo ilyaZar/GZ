@@ -1,27 +1,32 @@
 \usepackage[margin=3cm]{geometry} % sets the borders to 3cm each
-\usepackage[english]{babel}     %defines language for spacing
+\usepackage[english]{babel}     % defines language for spacing
 \usepackage[T1]{fontenc}        % sets font to T1 and allows umlaute
 \usepackage{lmodern}            % improves font display in PDFs
 \usepackage{microtype}          % improves spacing when using lmodern
-\usepackage{amsmath,amsfonts,amssymb}   % allows particular math environments
+\usepackage{amsmath,amsfonts,amssymb} % allows particular math environments
 \usepackage{graphicx}           % allows using graphics
-\usepackage{booktabs}           %allows creating professional tables with commands like \toprule
+\usepackage{booktabs}           % allows creating professional tables with commands like \toprule
 \usepackage{csquotes}           % better use of quotation marks, makes them context-sensitive
-%\usepackage{longtable}          % allows for Table over more than one page
-%\usepackage{sidewaystable}          % allows creating landscape tables
-\usepackage[labelfont=bf,format=hang]{caption} % more powerful caption of figures and tables; The language for the caption label like Figure is boldface (bf). The language is taken from the babel package, i.e. Abbildung if german instead of english.
+%\usepackage{longtable}         % allows for Table over more than one page
+%\usepackage{sidewaystable}     % allows creating landscape tables
+\usepackage[labelfont=bf,format=hang]{caption} % more powerful caption of figures and tables;
+% The language for the caption label like Figure is boldface (bf). 
+% The language is taken from the babel package, 
+% i.e. Abbildung if german instead of english.
 
-\usepackage{setspace}           % allows for \onehalfspacing and \doublespacing to set linespacing
-\usepackage{epstopdf}           % allows using eps-file with pdflatex
-\usepackage{textcomp}           % adds more symbols
-%\usepackage{indentfirst}       % use if you want to indent first row
+\usepackage{setspace}     % allows for \onehalfspacing and \doublespacing to set linespacing
+\usepackage{epstopdf}     % allows using eps-file with pdflatex
+\usepackage{textcomp}     % adds more symbols
+%\usepackage{indentfirst} % use if you want to indent first row
 \usepackage{bigints} % for large integrals
 \usepackage{dsfont} 
 %%%% define the usage of BibLaTeX for citations and bibliographies
-%\usepackage[%
-%citestyle=authoryear-comp,%use compressed author-year citation
-%bibstyle=JME,% use JME-style; change to JME_sentencecase to have all titles converted to lowercase letters
-%maxbibnames=5,% %maximum number of names printed in bibliography before truncation with ``et al.'' is used
+% usepackage[%
+% citestyle=authoryear-comp,%use compressed author-year citation
+% bibstyle=JME,% use JME-style; 
+% change to JME_sentencecase to have all titles converted to lowercase letters
+% maxbibnames=5,% %maximum number of names printed in bibliography
+% before truncation with ``et al.'' is used
 %minbibnames=1, % number of authors displayed if truncation happens
 %maxnames=4,% maximum number of names printed in citation before et al. is used
 %minnames=1,% number of authors displayed if truncation happens
@@ -36,7 +41,15 @@
 %\addglobalbib{mybibfile.bib} % defines the name of the .bib-file	
 
 
-\usepackage[pdfpagelabels=true,plainpages=false,pdftex,bookmarksnumbered=false,bookmarksopen=true]{hyperref}%plainpage and pdfpagelabels allows for correct figure links when using different page numberings
+\usepackage[
+pdfpagelabels=true,
+plainpages=false,
+pdftex,
+bookmarksnumbered=false,
+bookmarksopen=true]
+{hyperref}
+% plainpage and pdfpagelabels allows for correct figure links 
+% when using different page numberings
 % bookmarksnumbered=false shuts off TOC numbers in TOC of PDF
 % bookmarksopen=true opens TOC in Abobe Reader on the left
 %
@@ -79,13 +92,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usetikzlibrary{backgrounds}	
-\usepackage{setspace}           % allows for \onehalfspacing and \doublespacing to set linespacing
-\usepackage{epstopdf}           % allows using eps-file with pdflatex
-\usepackage{textcomp}           % adds more symbols
-%\usepackage{indentfirst}       % use if you want to indent first row
-
-
-
+\usepackage{setspace}     % allows for \onehalfspacing and \doublespacing to set linespacing
+\usepackage{epstopdf}     % allows using eps-file with pdflatex
+\usepackage{textcomp}     % adds more symbols
+%\usepackage{indentfirst} % use if you want to indent first row
 
 
 \hypersetup{
@@ -111,22 +121,29 @@ acronym,      %creates List of Abbreviations
 
 \newglossary[slg]{symbolslist}{syi}{syg}{List of Symbols} %defines a new list called symbolslist for the List of symbols
 
-\makeglossaries %need for sorting of entries to list of symbols and abbreviations; must be defined after all \newglossary commands
+\makeglossaries %need for sorting of entries to list of symbols and abbreviations;
+% must be defined after all \newglossary commands
 
-%% define terms for List of Symbols; entries only appear if they have been referenced in the main document  using either \gls{} or \glsadd{}
+% define terms for List of Symbols; entries only appear 
+% if they have been referenced in the main document using either \gls{} or \glsadd{}
 
 \newglossaryentry{symb:pi}{%
-    name={\ensuremath{\pi}}, %define symbol; the \ensuremath ensures the symbol can be used inside and outside math environments
-    description={ratio of circumference of circle to its diameter}, % the description that appears in the list of symbols
+    name={\ensuremath{\pi}}, 
+    %define symbol; the \ensuremath ensures the symbol can be 
+    %used inside and outside math environments
+    description={ratio of circumference of circle to its diameter}, % the description 
+    %that appears in the list of symbols
     sort=symbolpi, % key for sorting the symbols
-    type=symbolslist % specifies that the entry belongs to the symbolslist-list and not the default (acronym) list
+    type=symbolslist % specifies that the entry belongs to the symbolslist-list 
+    % and not the default (acronym) list
     }
 
 \newglossaryentry{symb:i}{name={\ensuremath{i}},description={square root of $-1$},sort=symboli,type=symbolslist}
 \newglossaryentry{symb:e}{name={\ensuremath{e}},description={Euler number},sort=symbole,type=symbolslist}
 
 \newacronym{acro:OLS}{OLS}{Ordinary Least Squares}%defines the acronym OLS
-\glsadd{acro:OLS} % add the acronym to the list of abbreviations, regardless of whether it has been used in the document
+\glsadd{acro:OLS} % add the acronym to the list of abbreviations, 
+% regardless of whether it has been used in the document
 
 \onehalfspacing
 
@@ -142,6 +159,7 @@ acronym,      %creates List of Abbreviations
 
 \newcommand{\given}{\lvert}
 \newcommand{\tc}[2]{\textcolor{#1}{#2}}
+
 \newcommand{\seqn}{{1:n}}
 \newcommand{\seqt}{{1:t}}
 \newcommand{\seqk}{{1:k}}
@@ -154,19 +172,55 @@ acronym,      %creates List of Abbreviations
 \newcommand{\seqnm}{{1:n-1}}
 \newcommand{\seqtm}{{1:t-1}}
 \newcommand{\seqkm}{{1:k-1}}
-\newcommand{\nmin}{{n-1}}
-\newcommand{\kmin}{{k-1}}
 \newcommand{\seqN}{i=1,\ldots,N}
 \newcommand{\seqM}{i=1,\ldots,M}
+
+
+\newcommand{\sumd}{\sum_{d=1}^D}
+\newcommand{\sumt}{\sum_{t=1}^T}
+\newcommand{\sumJd}{\sum_{j=1}^{J_d}}
+\newcommand{\sumk}{\sum_{k=1}^{K}}
+\newcommand{\sumPd}{\sum_{p=1}^{P_d}}
+
+\newcommand{\prodd}{\prod_{d=1}^D}
+\newcommand{\prodt}{\prod_{t=1}^T}
+\newcommand{\prodn}{\prod_{n=1}^{N}}
+\newcommand{\prodk}{\prod_{k=1}^{K}}
+\newcommand{\prodkM}{\prod_{k=2}^{M_{it}-1}}
+\newcommand{\prodJ}[1]{\prod_{j=1}^{J_{#1}}}
+
+\newcommand{\nmin}{{n-1}}
+\newcommand{\kmin}{{k-1}}
+
 \newcommand{\limN}{\lim_{N\to\infty}}
 \newcommand{\limn}{\lim_{n\to\infty}}
 \newcommand{\limM}{\lim_{M\to\infty}}
-\newcommand{\asw}{\reallywidehat{w}^i_{n-1\given N}}
-\newcommand{\aswTrunc}{\reallywidehat{w}^{i,l}_{n-1\given N}}
-\newcommand{\asW}{\reallywidehat{W}^i_{n-1\given N}}
-\newcommand{\asWb}{\reallywidehat{\bs{W}}_{n-1\given N}}
+
+\newcommand{\wt}{w_t^i}
+\newcommand{\wtun}{\tilde{w}_t^i}
+\newcommand{\wtt}{w_{t-1}^i}
+\newcommand{\wttun}{\tilde{w}_t^i}
+\newcommand{\asw}{\reallywidehat{w}^i_{t-1\given T}}
+\newcommand{\aswTrunc}{\reallywidehat{w}^{i,l}_{t-1\given T}}
+\newcommand{\asW}{\reallywidehat{W}^i_{t-1\given T}}
+\newcommand{\asWb}{\reallywidehat{\bs{W}}_{t-1\given T}}
+
 \newcommand{\rt}{\boldsymbol{\theta}}
 \newcommand{\p}{p_{\rt}}
+
+\newcommand{\targt}[1]{\pi_t^{#1}\left(x_\seqt\right)}
+\newcommand{\targT}[1]{\pi_T^{#1}\left(x_\seqtT\right)}
+\newcommand{\kernt}[1]{\gamma_t\left(x_\seqt^{#1}\right)}
+\newcommand{\kernT}[1]{\gamma_T\left(x_\seqtT^{#1}\right)}
+\newcommand{\kernCONDt}[1]{\gamma_t\left(x_t^{#1} \given x_{1:(t-1)}^{#1}\right)}
+\newcommand{\kernCONDT}[1]{\gamma_T\left(x_T^{#1} \given x_{1:(T-1)}^{#1}\right)}
+\newcommand{\propt}[1]{q_t\left(x_t^{#1} \given x_{1:(t-1)}^{#1}\right)}
+\newcommand{\propT}[1]{q_T\left(x_T^{#1} \given x_{1:(T-1)}^{#1}\right)}
+\newcommand{\propAUXt}[1]{q_t\left(x_t^{#1} \given x_{1:(t-1)}^{#1}; \hat{c}_t\right)}
+\newcommand{\propAUXT}[1]{q_T\left(x_T^{#1} \given x_{1:(T-1)}^{#1}; \hat{c}_t\right)}
+\newcommand{\propKERN}[1]{k_{t}\left(x_{t}^{#1}, x_{t-1}^{#1}; \hat{c}_{t}\right)}
+\newcommand{\propNORM}[3]{\chi_{#1}^{#3}\left(x_{#2}^{#3}; \hat{c}_{#1}\right)}
+
 % BELOW PACKAGE AND NEWCOMMAND THAT LEADS A REALLY
 % WIDE HAT SYMBOL
 \usepackage{scalerel,stackengine}
@@ -189,13 +243,6 @@ acronym,      %creates List of Abbreviations
 \newcommand{\atd}{\bs{\alpha}_{t,d}}
 \newcommand{\annd}{\bs{\alpha}_{n,d}}
 
-%\newcommand{\ad}{\alpha_d}
-%\newcommand{\Ant}{\bs{\alpha}_{n,t}}
-%\newcommand{\ant}[1]{\alpha_{n,t}^{#1}}
-%\newcommand{\antd}{\alpha_{n,t}^{d}}
-%\newcommand{\atd}{\bs{\alpha}_{t}^{d}}
-%\newcommand{\annd}{\bs{\alpha}_{n}^{d}}
-
 \newcommand{\bjd}{\bs{\beta}_{j,d}}
 \newcommand{\bjdlag}{\bs{\beta}_{p,d}^{lag}}
 \newcommand{\bjntd}{\bs{\beta}_{j,d}}
@@ -211,10 +258,6 @@ acronym,      %creates List of Abbreviations
 \newcommand{\bzb}{\bs{\beta}_{\bs{Z_b}}}
 \newcommand{\bzp}{\bs{\beta}_{\bs{Z_p}}}
 \newcommand{\bzq}{\bs{\beta}_{\bs{Z_q}}}
-%\newcommand{\bjd}{\bs{\beta}_j^{d}}
-%\newcommand{\bjntd}{\bs{\beta}_j^{d}}
-%\newcommand{\bjnd}{\bs{\beta}_j^{d}}
-%\newcommand{\bjtd}{\bs{\beta}_j^{d}}
 
 \newcommand{\ts}{\bs{\theta}}
 \newcommand{\tsa}{\bs{\theta}_a}
@@ -239,13 +282,6 @@ acronym,      %creates List of Abbreviations
 
 \newcommand{\etad}{\eta_{d}}
 \newcommand{\etantd}{\eta_{nt,d}}
-%
-%\newcommand{\Kjd}{\bs{K}_j^{d}}
-%\newcommand{\fjd}{f_j^{d}(\bs{\nu})}
-%
-%\newcommand{\etad}{\eta^{\ad}}
-%\newcommand{\etantd}{\eta_{n,t}^{\antd}}
-
 
 \newcommand{\xad}[1]{x_{\alpha_{#1},t,i}}
 \newcommand{\xadt}[1]{x_{\alpha_{#1},t-1,i}}
@@ -384,11 +420,6 @@ acronym,      %creates List of Abbreviations
 \newcommand{\IG}[2]{\mathcal{IG}\left(#1,#2\right)}
 \newcommand{\Dir}{\textbf{Dir}}
 
-\newcommand{\wt}{w_t^i}
-\newcommand{\wtun}{\tilde{w}_t^i}
-\newcommand{\wtt}{w_{t-1}^i}
-\newcommand{\wttun}{\tilde{w}_t^i}
-
 \newcommand{\yd}{y_d}
 \newcommand{\ynt}{\bs{y}_{nt}}
 \newcommand{\yntlag}{\bs{y}_{n(t-p)}}
@@ -399,18 +430,9 @@ acronym,      %creates List of Abbreviations
 \newcommand{\Jd}{J_d}
 \newcommand{\I}[1]{\bs{I}_{#1}}
 
-\newcommand{\sumd}{\sum_{d=1}^D}
-\newcommand{\sumt}{\sum_{t=1}^T}
-\newcommand{\sumJd}{\sum_{j=1}^{J_d}}
-\newcommand{\sumPd}{\sum_{p=1}^{P_d}}
+% ________________ Defines command \ScaleIfNeeded ______________________%
+% (-> that scales Figures to width of the page if they are larger)
 
-\newcommand{\prodd}{\prod_{d=1}^D}
-\newcommand{\prodt}{\prod_{t=1}^T}
-\newcommand{\prodn}{\prod_{n=1}^{N}}
-\newcommand{\prodJ}[1]{\prod_{j=1}^{J_{#1}}}
-
-
-% ________________ Defines command \ScaleIfNeeded that scales Figures to width of the page if they are larger ______________________%
 
 \makeatletter
 \def\ScaleIfNeeded{%

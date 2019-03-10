@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.9.29)  19 OCT 2018 12:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.24)  17 JAN 2019 19:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1105,7 +1105,7 @@ Package rerunfilecheck Info: File `summary.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  19464 strings out of 492982
- 332213 string characters out of 6134896
+ 332213 string characters out of 6134895
  594629 words of memory out of 5000000
  22601 multiletter control sequences out of 15000+600000
  71325 words of font info for 80 fonts, out of 8000000 for 9000

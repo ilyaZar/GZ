@@ -1,0 +1,105 @@
+\usepackage[margin=3cm]{geometry} % sets the borders to 3cm each
+\usepackage[english]{babel}     % defines language for spacing
+\usepackage[utf8]{inputenc}     % allows entering special characters
+\usepackage[T1]{fontenc}        % sets font to T1 and allows umlaute
+\usepackage{lmodern}            % improves font display in PDFs
+\usepackage{microtype}          % improves spacing when using lmodern
+\usepackage{amsmath,amsfonts,amssymb}   % allows particular math environments
+\usepackage{graphicx}           % allows using graphics
+\usepackage{booktabs}           % allows creating professional tables with commands like \toprule
+\usepackage{csquotes}           % better use of quotation marks, makes them context-sensitive
+%\usepackage{longtable}          % allows for Table over more than one page
+%\usepackage{sidewaystable}          % allows creating landscape tables
+\usepackage[labelfont=bf,format=hang]{caption} % more powerful caption of figures and tables; The language for the caption label like Figure is boldface (bf). The language is taken from the babel package, i.e. Abbildung if german instead of english.
+
+\usepackage{setspace}           % allows for \onehalfspacing and \doublespacing to set linespacing
+\usepackage{epstopdf}           % allows using eps-file with pdflatex
+\usepackage{textcomp}           % adds more symbols
+%\usepackage{indentfirst}       % use if you want to indent first row
+\usepackage[hyphens]{url}       % breaks overlong URLs (needs to be before biblatex)
+
+%%%% define the usage of BibLaTeX for citations and bibliographies
+\usepackage[%
+citestyle=authoryear-comp,%use compressed author-year citation
+bibstyle=./bibstyle/JME,% use JME-style; change to JME_sentencecase to have all titles converted to lowercase letters
+maxbibnames=5,% %maximum number of names printed in bibliography before truncation with ``et al.'' is used
+minbibnames=1, % number of authors displayed if truncation happens
+maxnames=4,% maximum number of names printed in citation before et al. is used
+minnames=1,% number of authors displayed if truncation happens
+datezeros=false,% no leading 0 if dates are printed
+date=long,%
+isbn=false,% show no ISBNs in bibliography (applies only if not a mandatory field)
+url=false,% show no urls in bibliography (applies only if not a mandatory field)
+doi=false, % show no dois in bibliography (applies only if not a mandatory field)
+eprint=false, %show no eprint-field in bibliography (applies only if not a mandatory field)
+backend=biber %use biber as the backend; backend=bibtex is less powerful, but easier to install
+]{biblatex}
+
+%\addbibresource{../mybibfile.bib} % defines the name of the .bib-file	
+
+\usepackage[pdfpagelabels=true,plainpages=false,pdftex,bookmarksnumbered=false,bookmarksopen=true]{hyperref}
+% plainpage and pdfpagelabels allows for correct figure links when using different page numberings
+% bookmarksnumbered=false shuts off TOC numbers in TOC of PDF
+% bookmarksopen=true opens TOC in Abobe Reader on the left
+
+
+\hypersetup{
+pdfproducer = {LaTeX},
+colorlinks,
+linkcolor=black,
+filecolor=yellow,
+urlcolor=blue,
+citecolor=black,
+pdftitle ={Title of the thesis},
+pdfsubject ={Thesis},
+pdfauthor = {Your Name },
+pdfkeywords = {Some keywords}
+pdfcreator={pdfLaTex}}
+
+
+
+\usepackage[%
+nonumberlist, %switch of displaying page numbers
+acronym,      %creates List of Abbreviations
+%toc,          %triggers entry into table of content
+%section      %defines the level where the TOC entry appears
+]{glossaries} % used to create list of symbols and abbreviations; one of the few packages to be defined after hyperref
+
+\newglossary[slg]{symbolslist}{syi}{syg}{List of Symbols} %defines a new list called symbolslist for the List of symbols
+
+\makeglossaries %need for sorting of entries to list of symbols and abbreviations; must be defined after all \newglossary commands
+
+%% define terms for List of Symbols; entries only appear if they have been referenced in the main document  using either \gls{} or \glsadd{}
+
+\newglossaryentry{symb:pi}{%
+    name={\ensuremath{\pi}}, %define symbol; the \ensuremath ensures the symbol can be used inside and outside math environments
+    description={ratio of circumference of circle to its diameter}, % the description that appears in the list of symbols
+    sort=symbolpi, % key for sorting the symbols
+    type=symbolslist % specifies that the entry belongs to the symbolslist-list and not the default (acronym) list
+    }
+
+\newglossaryentry{symb:i}{name={\ensuremath{i}},description={square root of $-1$},sort=symboli,type=symbolslist}
+\newglossaryentry{symb:e}{name={\ensuremath{e}},description={Euler number},sort=symbole,type=symbolslist}
+
+\newacronym{acro:OLS}{OLS}{Ordinary Least Squares}%defines the acronym OLS
+\glsadd{acro:OLS} % add the acronym to the list of abbreviations, regardless of whether it has been used in the document
+
+\onehalfspacing
+
+% ________________ Set up the document ______________________%
+
+\pagestyle{plain}          % empty header, page number in the middle of the footer
+\newcommand{\bs}{\boldsymbol}  % shortcut to generate bold symbols in math environments
+\setcounter{tocdepth}{3}   % The Table of contents is three levels deep, i.e. down to subsubsections.
+
+% ________________ Defines command \ScaleIfNeeded that scales Figures to width of the page if they are larger ______________________%
+
+\makeatletter
+\def\ScaleIfNeeded{%
+\ifdim\Gin@nat@width>\linewidth
+\linewidth
+\else
+\Gin@nat@width
+\fi
+}
+\makeatother
