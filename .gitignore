@@ -6,3 +6,6 @@
 *.pdf
 *.Rmd
 /analysis/2018-11-30/doc/*
+/analysis/2019-03-10/doc/*
+/doc/*
+data/doc/*

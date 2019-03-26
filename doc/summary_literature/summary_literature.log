@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.2.26)  4 MAR 2019 22:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.2.26)  10 MAR 2019 14:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1627,7 +1627,8 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ) [2
 
 
-] [3] [4])
+] [3] [4]
+[5])
 
 Package glossaries Warning: No \printglossary or \printglossaries found. 
 (Remove \makeglossaries if you don't want any glossaries.) 
@@ -1646,8 +1647,8 @@ Package logreq Info: Writing requests to 'summary_literature.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 25667 strings out of 492982
- 446393 string characters out of 6134896
+ 25668 strings out of 492982
+ 446399 string characters out of 6134896
  1049235 words of memory out of 5000000
  28730 multiletter control sequences out of 15000+600000
  40101 words of font info for 69 fonts, out of 8000000 for 9000
@@ -1659,10 +1660,10 @@ share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/l
 m/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texm
 f/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lm
 sy10.pfb>
-Output written on summary_literature.pdf (5 pages, 76645 bytes).
+Output written on summary_literature.pdf (6 pages, 77444 bytes).
 PDF statistics:
- 112 PDF objects out of 1000 (max. 8388607)
- 100 compressed objects within 1 object stream
- 20 named destinations out of 1000 (max. 500000)
+ 117 PDF objects out of 1000 (max. 8388607)
+ 103 compressed objects within 2 object streams
+ 21 named destinations out of 1000 (max. 500000)
  10353 words of extra memory for PDF output out of 12000 (max. 10000000)
 
