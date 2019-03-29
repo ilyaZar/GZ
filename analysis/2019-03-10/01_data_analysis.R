@@ -4,7 +4,7 @@
 #
 library(tidyverse)
 library(haven)
-dpth <- "/home/chief/Dropbox/research/GZ/data/raw/data request_ilo.dta"
+dpth <- "/home/chief/Dropbox/research/GZ/data/raw/data request_ilo_JLP13.dta"
 data_raw <- read_dta(file = dpth)
 # RENAMING "IRAN, ISLAMIC REPUBLIC OF" INTO "IRAN"
 # View(data_raw$country[data_raw$country == "Iran, Islamic Republic of"])
