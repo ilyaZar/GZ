@@ -1,15 +1,11 @@
-replace_var <- function(data, var_name, entry_old, entry_new) {
-  data_col <- paste("data", "$", var_name, sep = "")
-  data_col[data_col == entry_old] <- entry_new
-}
-generate_countries_num_var <- function(data, var, num) {
+generate_name_country_num_var <- function(data, var, num) {
   data_num_open <- data %>% filter(!is.na(eval(parse(text = var)))) %>%
     select(country, year)
 
   count_open <- data_num_open %>%  group_by(country) %>% summarise(count = n())
 
-  countries_num_open <- count_open$country[count_open$count >= num]
-  countries_num_open
+  name_country_num_open <- count_open$country[count_open$count >= num]
+  name_country_num_open
 }
 generate_pattern_row <- function(data, y_all) {
   y     <- data$year
@@ -153,20 +149,6 @@ generate_pattern_variables <- function(data,
   results <- rep(list(data.frame()), times = len_ID)
   names(results) <- paste("pattern", ID, sep = "_")
   return(list(all_pattern = results,
-              valid_countries = ID[valid_country],
-              invalid_countries = ID[!valid_country]))
+              valid_name_country = ID[valid_country],
+              invalid_name_country = ID[!valid_country]))
 }
-
-  #   if (max(y_sel$lengths[y_sel$values]) >= min_years) {
-  #     y_sel <- with(rle(y_bol),
-  #                   rep(lengths == max(lengths[values]) & values , lengths))
-  #     y_taken <- y_seq[y_sel]
-  #     y_ID    <- years %in% y_taken
-  #   } else {
-  #     y_ID <- rep(FALSE, times = length(years))
-  #   }
-  #   y_consec <- c(y_consec, y_ID)
-  # }
-  # data <- cbind(data, y_consec)
-  # data <- filter(data, y_consec == TRUE)
-  # return(data)
