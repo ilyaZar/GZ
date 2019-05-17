@@ -8,4 +8,8 @@
 /analysis/2018-11-30/doc/*
 /analysis/2019-03-10/doc/*
 /doc/*
-data/doc/*
+data/raw_data/*
+data/summary_data_information_sources/*
+data/summary_obtaining_data/*
+data/tidy/*
+data/useful_stuff/*
