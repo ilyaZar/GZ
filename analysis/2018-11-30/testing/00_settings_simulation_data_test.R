@@ -35,14 +35,8 @@ dataSim <- generate_data_DGP_1(par_true = par_true,
                                seq_cept = c(F, F, F, F),
                                old_regs = FALSE,
                                plot_states = FALSE)
-y_raw <- dataSim[[1]]
-yz_t  <- dataSim[[2]]
-y_t   <- matrix(0, nrow = TT, ncol = KK)
-for (t in 1:TT) {
-  ncut <- cut(y_raw[t, ], breaks = yz_t[t, ])
-  y_t[t, ] <- as.vector(table(ncut))
-}
-yz_t <- yz_t[, -(KK + 1)]
+y_t  <- dataSim[[1]]
+yz_t <- dataSim[[2]]
 xa_t <- dataSim[[3]][[1]]
 xb_t <- dataSim[[3]][[2]]
 xp_t <- dataSim[[3]][[3]]
@@ -51,3 +45,4 @@ za_t <- dataSim[[4]][[1]]
 zb_t <- dataSim[[4]][[2]]
 zp_t <- dataSim[[4]][[3]]
 zq_t <- dataSim[[4]][[4]]
+# y_raw <- dataSim[[5]]

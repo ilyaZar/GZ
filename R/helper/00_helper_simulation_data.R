@@ -78,6 +78,14 @@ generate_data_DGP_1 <- function(T, K, num_incs,
                       shape2 = xp,
                       shape3 = xq),
                  nrow = T, ncol = num_incs)
+
+  yt  <- matrix(0, nrow = T, ncol = K)
+  for (t in 1:T) {
+    ncut <- cut(yraw[t, ], breaks = yz[t, ])
+    yt[t, ] <- as.vector(table(ncut))
+  }
+  yz <- yz[, -(K + 1)]
+
   if (plot_states) {
     names_title <- paste("True states for ",
                          "xa_t (black),", " xb_t (red),",
@@ -92,7 +100,7 @@ generate_data_DGP_1 <- function(T, K, num_incs,
             ylab = names_ylab
             )
   }
-  return(list(yraw, yz, list(xa, xb, xp, xq), list(za, zb, zp, zq)))
+  return(list(yt, yz, list(xa, xb, xp, xq), list(za, zb, zp, zq), yraw))
 }
 parameter_fct_log_norm <- function(exp_mu, exp_sd) {
   log_mu  <- log(exp_mu/sqrt( 1 + (exp_sd^2/exp_mu^2) ))
