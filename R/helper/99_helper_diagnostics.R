@@ -154,9 +154,9 @@ analyse_states_ur <- function(trajectories) {
 verify_test <- function(make_correct_test = FALSE,
                         path_test_new,
                         path_test_sol) {
-  # this function compares two tests, one defined as the correct solution passed
-  # via path_test_sol and the other as the current test to compare with passed
-  # via path_test_new
+  # this function compares two tests, one defined as the correct solution, that
+  # is passed via path_test_sol and the other as the current test to compare
+  # with, that is passed via path_test_new
   if (make_correct_test) {
     # analyse_mcmc_convergence with table_view = table_save = TRUE and a
     # table_path set to save an output table of a test as a new

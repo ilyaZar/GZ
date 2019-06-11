@@ -1,4 +1,4 @@
-generate_data <- function(T, K, num_incs,
+generate_data_DGP_1 <- function(T, K, num_incs,
                           par_true,
                           x_levels,
                           seq_logs,

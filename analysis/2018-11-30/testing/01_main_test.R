@@ -13,8 +13,8 @@ source("./R/02_pgas.R")
 init_at_true  <- TRUE
 pgas_run      <- TRUE
 set.seed(123)
-source("./analysis/2018-11-30/testing/00_settings_simulation_test.R")
-source("./analysis/2018-11-30/testing/00_settings_simulation_test_init.R")
+source("./analysis/2018-11-30/testing/00_settings_simulation_data_test.R")
+source("./analysis/2018-11-30/testing/00_settings_simulation_init_test.R")
 out_pgas <- pgas(N = num_particles, MM = num_mcmc, KK = KK, TT = TT,
                  y = y_t, yz = yz_t,
                  Za = za_t, Zb = zb_t, Zp = zp_t, Zq = zq_t,
