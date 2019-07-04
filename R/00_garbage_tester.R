@@ -1,3 +1,16 @@
+
+
+
+sort(yraw[58, ])[1:10]
+yraw_sorted[, 58][1:10]
+
+sort(yraw[1, ])[99900:100000]
+yraw_sorted[, 1][99900:100000]
+
+identical(sort(yraw[10, ]), yraw_sorted[, 11])
+
+
+
 regs_a[, 1]  <- log(xa_t[1:(T - 1)])
 x_lhs        <- log(xa_t[2:T])
 

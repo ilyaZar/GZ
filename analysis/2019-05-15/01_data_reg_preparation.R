@@ -97,19 +97,19 @@ reg_var_full <- c(reg_var_trade_open,
                   reg_var_macro,
                   reg_var_controls,
                   reg_var_instruments)
-reg_var_sub1 <- c("open", "finopen", "tariff", "liab_y")
+reg_var_sub_JLP13_bench <- c("open","expA_y", "tariff", "finopen", "pcrdbofgdp", "empsh_ind")
 ## @knitr select_reg
 data_reg_full <- data_raw_reg %>% select(country, year, !!! reg_var_full) %>%
   drop_na(!!! reg_var_full)
-data_reg_sub1 <- data_raw_reg %>% select(country, year, !!! reg_var_sub1) %>%
-  drop_na(!!! reg_var_sub1)
-generate_data_info(data = "data_reg_full", data_compare = "data_reg_sub1")
+data_reg_sub_JLP13_bench <- data_raw_reg %>% select(country, year, !!! reg_var_sub_JLP13_bench) %>%
+  drop_na(!!! reg_var_sub_JLP13_bench)
+generate_data_info(data = "data_reg_full", data_compare = "data_reg_sub_JLP13_bench")
 ## @knitr select_reg_country_jlp13
 data_reg_full_jlp13 <- data_reg_full %>%
   filter(country %in% sub_country_reg_jlp13)
-data_reg_sub1_jlp13 <- data_reg_sub1 %>%
+data_reg_sub_JLP13_bench_jlp13 <- data_reg_sub_JLP13_bench %>%
   filter(country %in% sub_country_reg_jlp13)
-generate_data_info(data = "data_reg_full_jlp13", data_compare = "data_reg_sub1_jlp13")
+generate_data_info(data = "data_reg_full_jlp13", data_compare = "data_reg_sub_JLP13_bench_jlp13")
 ## @knitr duplicate_check
 # duplicated_reg_data <- get_duplication_var_list(data_reg_full_jlp13,
 #                                                 dep_data_used = FALSE)
@@ -118,7 +118,8 @@ data_dupl_regs <- get_duplication_obs(data = data_reg_full_jlp13)
 print(data_dupl_regs)
 ## @knitr final_reg_data
 # data_reg <- data_reg_full
-data_reg <- data_reg_sub1
+# data_reg <- data_raw_reg %>% select(country, year)
+data_reg <- data_reg_sub_JLP13_bench
 # data_reg <- data_reg_full_jlp13
-# data_reg <- data_reg_sub1_jlp13
+# data_reg <- data_reg_sub_JLP13_bench_jlp13
 

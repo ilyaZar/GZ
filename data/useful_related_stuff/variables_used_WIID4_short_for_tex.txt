@@ -1,0 +1,41 @@
+id & Identifier
+country &  Country/area
+c3 & 3-digit country code
+c2 & 2-digit country code
+year & year
+q1-q5 & quintile group shares of resource
+d1-d10 & decile group shares of resource
+bottom5 and top5 & Bottom five and top five percent group shares of resource
+resource & Resource concept
+resource_detailed &  detailed resource concept
+scale & equivalence scale
+scale_detailed & detailed equivalence scale
+sharing_unit & income sharing unit/statistical unit
+reference_unit & unit of analysis, indicates whether the data has been weighted with a person or a household weight
+areacovr & area coverage: the land area which was included in the original sample surveys etc.
+areacovr_detailed & detailed area coverage
+popcovr & population coverage: the population covered in the sample surveys in the land area (all, rural, urban, etc.) which was included
+popcovr_detailed & detailed population coverage: includes age coverage information in certain cases
+region_un & regional grouping based on United Nations geoscheme
+region_un_sub & sub-regional grouping based on United Nations geoscheme
+region_wb & regional grouping based on World Bank classification
+eu & current EU member state
+oecd & current OECD member state
+incomegroup & World Bank classification by country income
+mean &  survey mean given with the same underlying definitons as the Gini coefficient and the share data
+median & survey median given with the same underlying definitons as the Gini coeffiecient and the share data
+currency & currency for the mean and median values; if refence is US\$ 2011PPP it means that the currency is in 2011 US dollar per month, with purchasing pwoer parity applied on it
+reference_period & Time period for measuring mean and median values
+exchangerate & Conversion rate from local currency units (LCU) to United States Dollars (USD)
+mean_usd & Mean measure in United States Dollar (USD)
+median_usd & Median measure in United States Dollar (USD)
+gdp_ppp_pc_usd2011 & Gross Domestic Product (GDP) is converted to United States Dollars (USD) using purchasing power
+parity rates and divided by total population. Data are in constant 2011 United States Dollar (USD)
+population & Population of countries from the UN population prospects
+revision & Indicates the time of the revision when the observation was included to the database
+quality & Quality assessment
+quality_score & Computed quality score
+source & Source type
+source_detailed & Source from which the observation was obtained
+source_comments & Additional source comments
+survey & Originating survey information

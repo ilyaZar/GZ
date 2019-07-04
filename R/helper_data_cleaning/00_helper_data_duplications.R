@@ -50,7 +50,9 @@ get_duplication_var_list <- function(data_double_entry, dep_data_used = TRUE) {
   #
   # The output list is called: "DUPLICATION LIST"
   if (nrow(data_double_entry) == 0) {
-    stop("Empty dataset: no duplicated observations passed!")
+    # stop("Empty dataset: no duplicated observations passed!")
+    warning("Empty dataset: no duplicated observations passed!")
+    return(NULL)
   }
   data <- data_double_entry
   if (dep_data_used) {

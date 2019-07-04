@@ -46,3 +46,4 @@ data_all <- inner_join(data_dep, data_reg)
 generate_data_info("data_all", details_miss = TRUE, details_avail = TRUE)
 # THE REGRESSORS USED IN THE DATASET ARE:
 names(data_all)
+save(data_all, file = "~/Dropbox/research/GZ/data/tidy/data_deciles_reg_vars.rda")
