@@ -1,7 +1,4 @@
 rm(list = ls())
-library(GB2group)
-library(GB2)
-library(minpack.lm)
 source("./R/00_helper_lib_load.R")
 source("./R/helper_pgas/00_helper_model_fcts.R")
 source("./R/helper_pgas/00_helper_simulation_data.R")
@@ -16,14 +13,14 @@ for (t in 1:TT) {
 }
 y_raw_means <- rowMeans(dataSim[[5]])
 
-num_obs <- 90
-fitgroup.gb2(y_t[num_obs,],
-             gini.e = ginis[num_obs],
-             pc.inc = y_raw_means[num_obs],
-             se.gmm = FALSE, se.scale = FALSE,
-             N = num_obs, #rescale = 1,
-             gini = TRUE
-)
+num_obs <- 39
+# fitgroup.gb2(y_t[num_obs,],
+#              gini.e = ginis[num_obs],
+#              pc.inc = y_raw_means[num_obs],
+#              se.gmm = FALSE, se.scale = FALSE,
+#              N = num_obs, #rescale = 1,
+#              gini = TRUE
+# )
 my_optim(y_t[num_obs,],
          gini.e = ginis[num_obs],
          pc.inc = y_raw_means[num_obs],

@@ -40,7 +40,6 @@ my_optim <- function(y, x = rep(1/length(y), length(y)), gini.e, pc.inc = NULL,
   par.p <- rep(0, 4 * length(grid))
   par.q <- rep(0, 4 * length(grid))
   rss <- rep(1000, 4 * length(grid))
-  # browser()
   for (j in (1:length(grid))) {
     ginit <- function(p) {
       gini_b2(c(p, grid[j])) - gini.e
@@ -169,6 +168,7 @@ my_optim <- function(y, x = rep(1/length(y), length(y)), gini.e, pc.inc = NULL,
   nls.a <- par.a[rg]
   nls.p <- par.p[rg]
   nls.q <- par.q[rg]
+  starting_values <- c(nls.a, NA, nls.p, nls.q)
   if (nls.q <= 1/nls.a) {
     temp.b <- NA
     print("Unable to compute the scale parameter and the GMM estimation. Condition for the existence of the first moment violated: q <= 1 / a")
@@ -180,6 +180,7 @@ my_optim <- function(y, x = rep(1/length(y), length(y)), gini.e, pc.inc = NULL,
   if (!is.null(pc.inc) & (nls.q > 1/nls.a)) {
     incpc <- pc.inc/rescale
     temp.b <- scale.gb2(c(nls.a, nls.p, nls.q), incpc)
+    starting_values[2] <- temp.b
   }
   if (nls.q <= 2/nls.a) {
     print("Unable to compute GMM estimates of the parameters. Condition for the existence of the second moment violated: q <= 2 / a")
@@ -270,12 +271,14 @@ my_optim <- function(y, x = rep(1/length(y), length(y)), gini.e, pc.inc = NULL,
     out2 <- list(grouped.data = grouped.data, distribution = "GB2",
                  nls.estimation = nls.estimation, nls.rss = nls.rss,
                  gmm.estimation = gmm.estimation, gmm.rss = gmm.rss,
-                 gini.estimation = gini.estimation)
+                 gini.estimation = gini.estimation,
+                 starting_values = starting_values)
   }
   else {
     out2 <- list(grouped.data = grouped.data, distribution = "GB2",
                  nls.estimation = nls.estimation, nls.rss = nls.rss,
-                 gmm.estimation = gmm.estimation, gmm.rss = gmm.rss)
+                 gmm.estimation = gmm.estimation, gmm.rss = gmm.rss,
+                 starting_values = starting_values)
   }
   return(out2)
 }

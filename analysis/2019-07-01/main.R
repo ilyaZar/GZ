@@ -1,6 +1,9 @@
 rm(list = ls())
-source("./R/helper_data_analyze/00_helper_data_analyze_plots.R")
+source("./R/00_helper_lib_load.R")
+source("./R/helper_data_analysis/00_helper_data_analyze_plots.R")
 source("./analysis/2019-05-15/data_cleaning_main.R")
+source("./R/helper_optim/00_helper_optim.R")
+source("./R/helper_optim/01_my_optim.R")
 # LOAD AND CLEAN DATA: ----------------------------------------------------
 load("data/tidy/data_deciles_reg_vars.rda")
 data_all <- as.data.frame(data_all)
