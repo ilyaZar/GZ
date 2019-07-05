@@ -1,9 +1,10 @@
-generate_ts_plot_country <- function(data,
+generate_ts_plot_country <- function(data, starting_values,
                                      country_name,
                                      nonconv_obs) {
   # browser()
   nonconv_obs_sub <- nonconv_obs %>% filter(country == country_name)
   data_sub <- filter(data, country == country_name)
+  starting_values_sub <- filter(starting_values, country == country_name)
   len_sub  <- nrow(data_sub)
   gini_emp <- numeric(len_sub)
   expt_emp <- numeric(len_sub)
@@ -83,25 +84,33 @@ generate_ts_plot_country <- function(data,
   plot_a <- ggplot(data_complete, aes(year, a)) +
     geom_point() +
     geom_line() +
+    geom_line(data = starting_values_sub, aes(x = year, y = a), col = "red") +
     geom_point(data = data_nonconvs, mapping = aes(x = year, y = a), col = "red") +
+    geom_point(data = starting_values_sub, mapping = aes(x = year, y = a), col = "red") +
     geom_point(data = data_nonobs, mapping = aes(x = year, y = a), col = "blue")
 
   plot_b <- ggplot(data_complete, aes(year, b)) +
     geom_point() +
     geom_line() +
+    geom_line(data = starting_values_sub, aes(x = year, y = b), col = "red") +
     geom_point(data = data_nonconvs, mapping = aes(x = year, y = b), col = "red") +
+    geom_point(data = starting_values_sub, mapping = aes(x = year, y = b), col = "red") +
     geom_point(data = data_nonobs, mapping = aes(x = year, y = b), col = "blue")
 
   plot_p <- ggplot(data_complete, aes(year, p)) +
     geom_point() +
     geom_line() +
+    geom_line(data = starting_values_sub, aes(x = year, y = p), col = "red") +
     geom_point(data = data_nonconvs, mapping = aes(x = year, y = p), col = "red") +
+    geom_point(data = starting_values_sub, mapping = aes(x = year, y = p), col = "red") +
     geom_point(data = data_nonobs, mapping = aes(x = year, y = p), col = "blue")
 
   plot_q <- ggplot(data_complete, aes(year, q)) +
     geom_point() +
     geom_line() +
+    geom_line(data = starting_values_sub, aes(x = year, y = q), col = "red") +
     geom_point(data = data_nonconvs, mapping = aes(x = year, y = q), col = "red") +
+    geom_point(data = starting_values_sub, mapping = aes(x = year, y = q), col = "red") +
     geom_point(data = data_nonobs, mapping = aes(x = year, y = q), col = "blue")
 
   # browser()

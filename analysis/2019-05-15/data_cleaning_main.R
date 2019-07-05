@@ -9,10 +9,6 @@ source("R/helper_data_cleaning/00_helper_data_duplications.R")
 source("R/helper_data_cleaning/00_helper_data_reg.R")
 source("R/helper_data_cleaning/00_helper_data_diagnostics.R")
 # loading libraries: ------------------------------------------------------
-library(tidyverse)
-library(magrittr)
-library(haven)
-library(rlang)
 
 local_dtpth <- "/home/chief/Dropbox/research/GZ/data/raw_data"
 
