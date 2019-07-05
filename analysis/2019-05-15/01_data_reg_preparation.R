@@ -122,4 +122,8 @@ print(data_dupl_regs)
 data_reg <- data_reg_sub_JLP13_bench
 # data_reg <- data_reg_full_jlp13
 # data_reg <- data_reg_sub_JLP13_bench_jlp13
-
+data_test_quintiles <- data_raw_reg %>%
+  filter(country %in% sub_country_reg_jlp13) %>%
+  select(country, year, starts_with("quint"), reg_var_sub_JLP13_bench) %>%
+  drop_na()
+write_excel_csv(data_test_quintiles, "data/tidy/data_quintiles_reg_var.csv")
