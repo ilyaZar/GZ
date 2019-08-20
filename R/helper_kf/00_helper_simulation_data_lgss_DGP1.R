@@ -1,10 +1,11 @@
-generate_data_DGP_1 <- function(T, K, num_incs,
-                                par_true,
-                                x_levels,
-                                seq_logs,
-                                seq_cept,
-                                old_regs = FALSE,
-                                plot_states) {
+generate_data_lgssm_DGP_1 <- function(T, K, num_incs,
+                                      par_true,
+                                      VCM_Y,
+                                      x_levels,
+                                      seq_logs,
+                                      seq_cept,
+                                      old_regs = FALSE,
+                                      plot_states) {
   xa <- rep(0, T)
   xb <- rep(0, T)
   xp <- rep(0, T)
@@ -63,27 +64,39 @@ generate_data_DGP_1 <- function(T, K, num_incs,
                         old_regs = old_regs)
   xq <- res_q[[1]]
   zq <- res_q[[2]]
-  # Generate individual incomes, group boundaries and grouped income --------
-  yraw <- matrix(rgb2(n = num_incs*T,
-                      shape1 = xa,
-                      scale  = xb,
-                      shape2 = xp,
-                      shape3 = xq),
-                 nrow = T, ncol = num_incs)
-  seq_prob <- rep(seq(from = 0, to = 1 - (1/K), length.out = K), each = T)
-  yz <- matrix(qgb2(prob = seq_prob,
-                    shape1 = xa,
-                    scale  = xb,
-                    shape2 = xp,
-                    shape3 = xq),
-               nrow = T, ncol = K)
-  yz   <- cbind(yz, rep(Inf, times = T))
-  yt  <- matrix(0, nrow = T, ncol = K)
+  # Generate lgssm measurements ---------------------------------------------
+  x_all_t <- rbind(xa, xb, xp , xq)
+  yt <- matrix(0, nrow = 4, ncol = T)
+  # browser()
+  # exact yt, fixed VCM, VCM_Y ----------------------------------------------
   for (t in 1:T) {
-    ncut <- cut(yraw[t, ], breaks = yz[t, ])
-    yt[t, ] <- as.vector(table(ncut))
+    yt[, t] <- mvrnorm(1, mu = x_all_t[, t], Sigma = VCM_Y)
   }
-  yz <- yz[, -(K + 1)]
+  # exact yt, time varying VCM, VCM_Y_t -------------------------------------
+  ## 1st variation: random --------------------------------------------------
+  ## 2nd variation: following the asympt. GMM -------------------------------
+  # estimated yt, time varying VCM, VCM_Y_t at true vals---------------------
+  # estimated yt, time varying AND estimated VCM, \hat{VCM_Y}_t -------------
+  # yraw <- matrix(rgb2(n = num_incs*T,
+  #                     shape1 = xa,
+  #                     scale  = xb,
+  #                     shape2 = xp,
+  #                     shape3 = xq),
+  #                nrow = T, ncol = num_incs)
+  # seq_prob <- rep(seq(from = 0, to = 1 - (1/K), length.out = K), each = T)
+  # yz <- matrix(qgb2(prob = seq_prob,
+  #                   shape1 = xa,
+  #                   scale  = xb,
+  #                   shape2 = xp,
+  #                   shape3 = xq),
+  #              nrow = T, ncol = K)
+  # yz   <- cbind(yz, rep(Inf, times = T))
+  # yt  <- matrix(0, nrow = T, ncol = K)
+  # for (t in 1:T) {
+  #   ncut <- cut(yraw[t, ], breaks = yz[t, ])
+  #   yt[t, ] <- as.vector(table(ncut))
+  # }
+  # yz <- yz[, -(K + 1)]
   # Optional state plotting -------------------------------------------------
   if (plot_states) {
     names_title <- paste("True states for ",
@@ -99,5 +112,5 @@ generate_data_DGP_1 <- function(T, K, num_incs,
             ylab = names_ylab
     )
   }
-  return(list(yt, yz, list(xa, xb, xp, xq), list(za, zb, zp, zq), yraw))
+  return(list(yt, yz = NULL, list(xa, xb, xp, xq), list(za, zb, zp, zq))) # , yraw)
 }
